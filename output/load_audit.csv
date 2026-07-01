@@ -1,0 +1,13 @@
+table_name,rows_loaded,status
+stg_companies,92,SUCCESS
+stg_sectors,92,SUCCESS
+stg_peer_groups,56,SUCCESS
+stg_analysis,20,SUCCESS
+stg_balancesheet,1312,SUCCESS
+stg_cashflow,1187,SUCCESS
+stg_profitandloss,1276,SUCCESS
+stg_financial_ratios,1184,SUCCESS
+stg_market_cap,552,SUCCESS
+stg_stock_prices,5520,SUCCESS
+stg_documents,1585,SUCCESS
+stg_prosandcons,16,SUCCESS

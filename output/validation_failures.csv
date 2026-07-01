@@ -1,0 +1,8 @@
+dataset,rule,column,failed_rows,severity
+analysis,invalid_company_id,company_id,4,CRITICAL
+balancesheet,invalid_company_id,company_id,85,CRITICAL
+cashflow,invalid_company_id,company_id,96,CRITICAL
+profitandloss,missing_year,year,100,HIGH
+profitandloss,invalid_company_id,company_id,99,CRITICAL
+documents,invalid_company_id,company_id,128,CRITICAL
+prosandcons,invalid_company_id,company_id,2,CRITICAL
