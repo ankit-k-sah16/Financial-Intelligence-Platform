@@ -285,3 +285,24 @@ CREATE TABLE IF NOT EXISTS stg_stock_prices (
 
     adjusted_close REAL
 );
+
+ALTER TABLE stg_financial_ratios
+ADD COLUMN revenue_cagr_5yr REAL;
+
+ALTER TABLE stg_financial_ratios
+ADD COLUMN revenue_cagr_5yr_flag TEXT;
+
+ALTER TABLE stg_financial_ratios
+ADD COLUMN pat_cagr_5yr REAL;
+
+ALTER TABLE stg_financial_ratios
+ADD COLUMN pat_cagr_5yr_flag TEXT;
+
+ALTER TABLE stg_financial_ratios
+ADD COLUMN eps_cagr_5yr REAL;
+
+ALTER TABLE stg_financial_ratios
+ADD COLUMN eps_cagr_5yr_flag TEXT;
+
+ALTER TABLE stg_financial_ratios
+ADD COLUMN composite_quality_score REAL;
