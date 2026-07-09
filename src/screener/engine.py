@@ -19,6 +19,7 @@ from pathlib import Path
 import numpy as np 
 import pandas as pd
 import yaml
+from src.screener.presets import PRESETS
 
 #-----------------------------------------------------
 # Financial Sectors
@@ -36,7 +37,7 @@ financial_sectors={
 #-----------------------------------------------------
 class ScreenerEngine:
 
-    def __int__(self,config_path:str):
+    def __init__(self,config_path:str):
         
         self.config_path=Path(config_path)
         
@@ -49,7 +50,7 @@ class ScreenerEngine:
     def _is_financial(sector):
         
         if pd.isna(sector):
-            return None
+            return False
 
         return str(sector).strip().lower() in financial_sectors
     
@@ -58,13 +59,13 @@ class ScreenerEngine:
     def _passes_icr(value,threshold):
         
         if threshold is None:
-            return None
+            return True
         
         if pd.isna(value):
-            return None
+            return False
 
         if isinstance(value,str): 
-            if value.lower().strip() == "dabt free":
+            if value.lower().strip() == "debt free":
                 return True
             
             try:
@@ -76,19 +77,21 @@ class ScreenerEngine:
         return value >= threshold
     
     #------------------------------------------------------
-
-    def screen(self,ratios:pd.DataFrame):
-
-        df=ratios.copy()
-
-        filters=self.config.get("filters",{})
-
+    def apply_filters(self, ratios, filters):
+        
+        df = ratios.copy()
+        df = ( df.sort_values("year").groupby("company_id", as_index=False).tail(1)
+                .reset_index(drop=True)
+      
+      
+      
+)
         # ROE
         #-------------------------
         value= filters.get("roe_min")
 
         if value is not None:
-            df = df[df["roe"] >= value]
+            df = df[df["return_on_equity_pct"] >= value]
 
 
         # D/E
@@ -109,7 +112,7 @@ class ScreenerEngine:
         value = filters.get("fcf_min")
 
         if value is not None:
-            df = df[df["free_cash_flow"] >= value]
+            df = df[df["free_cash_flow_cr"] >= value]
 
         # -------------------------------------------------
 
@@ -130,7 +133,7 @@ class ScreenerEngine:
         value = filters.get("opm_min")
 
         if value is not None:
-            df = df[df["opm"] >= value]
+            df = df[df["operating_profit_margin_pct"]>= value]
 
         # -------------------------------------------------
 
@@ -180,7 +183,7 @@ class ScreenerEngine:
         value = filters.get("eps_cagr_min")
 
         if value is not None:
-            df = df[df["eps_cagr"] >= value]
+            df = df[df["eps_cagr_5yr"] >= value]
 
         # -------------------------------------------------
 
@@ -202,27 +205,46 @@ class ScreenerEngine:
         # Composite Quality Score
         # --------------------------------------------------
 
-        score=(
-            df['roe'].fillna(0)
-            + df['roce'].fillna(0)
-            + df['opm'].fillna(0)
-            + df['revenue_cagr_5y'].fillna(0)
-            + df['pat_cagr_5y'].fillna(0)
-            + df['eps_cagr'].fillna(0)
-            + (100 - df['debt_to_equity'].fillna(100)) 
+        score = (
+            df["return_on_equity_pct"].fillna(0)
+            + df["return_on_capital_employed_pct"].fillna(0)
+            + df["operating_profit_margin_pct"].fillna(0)
+            + df["revenue_cagr_5yr"].fillna(0)
+            + df["pat_cagr_5yr"].fillna(0)
+            + df["eps_cagr_5yr"].fillna(0)
+            + (100 - df["debt_to_equity"].fillna(100))
         )
 
-        df("composite_quality_score") = score
+        df["composite_quality_score"] = score
 
         df = df.sort_values(by="composite_quality_score",
             ascending=False).reset_index(drop=True)
         
         return df
 
-            
+    def screen(self, ratios):
+        
+        filters = self.config.get("filters", {})
+        
+        return self.apply_filters(ratios, filters)
 
+    def screen_preset(self, ratios, preset_name):
+        
+        print("PRESETS =", PRESETS.keys())
+        print("Requested =", preset_name)
+
+        if preset_name not in PRESETS:
+            raise ValueError(f"Unknown preset: {preset_name}")
+
+        filters = PRESETS[preset_name]
+        
+        return self.apply_filters(ratios, filters)
+    
+
+    
+    
             
-        )
+        
         
 
             

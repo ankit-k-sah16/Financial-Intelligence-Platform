@@ -5,6 +5,10 @@ Computes financial KPIs from staging tables and stores results into stg_financia
 
 """
 from pathlib import Path 
+import sys
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+sys.path.append(str(PROJECT_ROOT))
+
 from datetime import datetime
 import pandas as pd
 from sqlalchemy import create_engine
@@ -370,86 +374,122 @@ class RatioEngine:
             # --------------------------------------------------
             # Save Result
             # --------------------------------------------------
-            results.append ({
+            results.append({
+
+                # --------------------------------------------------
+                # Identity
+                # --------------------------------------------------
                 "company_id": company_id,
-
                 "year": year,
+                "company_name": row.get("company_name", None),
+                "ticker": row.get("ticker", None),
+                "broad_sector": broad_sector,
 
-                "net_profit_margin_pct":net_profit_margin,
-                    
-                "operating_profit_margin_pct":operating_profit_margin,
-                    
-                "return_on_equity_pct":roe,
-                    
+                # --------------------------------------------------
+                # Raw Financial Data
+                # --------------------------------------------------
+                "sales": sales,
+                "operating_profit": operating_profit,
+                "other_income": other_income,
+                "interest": interest,
+                "net_profit": net_profit,
+                "eps": eps,
+                "equity": equity,
+                "reserves": reserves,
+                "borrowings": borrowings,
+                "investments": investments,
+                "total_assets": total_assets,
+                "operating_activity": operating_activity,
+                "investing_activity": investing_activity,
+                "financing_activity": financing_activity,
+
+                # --------------------------------------------------
+                # Market Data
+                # --------------------------------------------------
+                "market_cap": self.safe_float(row.get("market_cap")),
+                "pe": self.safe_float(row.get("pe")),
+                "pb": self.safe_float(row.get("pb")),
+                "dividend_yield": self.safe_float(row.get("dividend_yield")),
+
+                # --------------------------------------------------
+                # Profitability Ratios
+                # --------------------------------------------------
+                "net_profit_margin_pct": net_profit_margin,
+                "operating_profit_margin_pct": operating_profit_margin,
+                "return_on_equity_pct": roe,
                 "return_on_capital_employed_pct": roce,
+                "return_on_assets_pct": roa,
 
-                "return_on_assets_pct":roa,
-                    
-                "debt_to_equity":debt_to_equity,
-                    
+                # --------------------------------------------------
+                # Leverage Ratios
+                # --------------------------------------------------
+                "debt_to_equity": debt_to_equity,
                 "high_leverage_flag": high_leverage_flag,
-                
-                "interest_coverage":interest_coverage,
-                    
-                "icr_label":icr_label,
-                    
-                "icr_warning_flag":icr_warning,
-                    
-                "asset_turnover":asset_turnover,
-                    
-                "free_cash_flow_cr":free_cash_flow,
-                    
-                "capex_cr":capex_value,
-                    
-                "capex_label":capex_label,
-                    
-                "fcf_conversion_rate":fcf_conversion,
-                    
-                "net_debt":net_debt,
+                "interest_coverage": interest_coverage,
+                "icr_label": icr_label,
+                "icr_warning_flag": icr_warning,
+                "net_debt": net_debt,
 
-                "capital_allocation_pattern":capital_pattern,
-                    
+                # --------------------------------------------------
+                # Efficiency
+                # --------------------------------------------------
+                "asset_turnover": asset_turnover,
+
+                # --------------------------------------------------
+                # Cash Flow
+                # --------------------------------------------------
+                "free_cash_flow_cr": free_cash_flow,
+                "cash_from_operations_cr": operating_activity,
+                "capex_cr": capex_value,
+                "capex_label": capex_label,
+                "fcf_conversion_rate": fcf_conversion,
+                "capital_allocation_pattern": capital_pattern,
+
+                # --------------------------------------------------
+                # Shareholder Metrics
+                # --------------------------------------------------
                 "earnings_per_share": eps,
-                
-                "book_value_per_share":book_value_per_share,
-                    
-                "dividend_payout_ratio_pct":dividend_payout,
-                
-                "total_debt_cr": borrowings,
-                
-                "cash_from_operations_cr":operating_activity,
-                
-                "revenue_cagr_5yr":revenue_cagr_5yr,
-            
+                "book_value_per_share": book_value_per_share,
+                "dividend_payout_ratio_pct": dividend_payout,
+
+                # --------------------------------------------------
+                # Growth Metrics
+                # --------------------------------------------------
+                "revenue_cagr_5yr": revenue_cagr_5yr,
                 "revenue_cagr_5yr_flag": revenue_cagr_flag,
-                
                 "pat_cagr_5yr": pat_cagr_5yr,
-                
-                "pat_cagr_5yr_flag":pat_cagr_flag,
-                    
-                "eps_cagr_5yr":eps_cagr_5yr,
-                    
-                "eps_cagr_5yr_flag":eps_cagr_flag,
-                    
-                "cfo_quality_score":cfo_quality,
-                    
-                "cfo_quality_label": cfo_quality_label,    
+                "pat_cagr_5yr_flag": pat_cagr_flag,
+                "eps_cagr_5yr": eps_cagr_5yr,
+                "eps_cagr_5yr_flag": eps_cagr_flag,
 
-                "roce_status":roce_status,
-            
+                # Optional (if you compute these later)
+                "revenue_cagr_3yr": row.get("revenue_cagr_3yr", None),
+                "debt_declining": row.get("debt_declining", None),
+
+                # --------------------------------------------------
+                # Quality Metrics
+                # --------------------------------------------------
+                "cfo_quality_score": cfo_quality,
+                "cfo_quality_label": cfo_quality_label,
+                "roce_status": roce_status,
                 "roce_type": roce_type,
-                
-                "roce_benchmark":roce_benchmark,
+                "roce_benchmark": roce_benchmark,
 
-                "composite_quality_score":composite_quality_score,
+                # --------------------------------------------------
+                # Overall Scores
+                # --------------------------------------------------
+                "composite_quality_score": composite_quality_score,
+                "company_rating": company_rating,
+                "financial_health": financial_health
 
-                "company_rating":company_rating,
-                
-                "financial_health":financial_health,  
-            }
-            )      
+            })      
 
         self.results = pd.DataFrame(results)
+
+        print("=" * 80)
+        print("NEW DATAFRAME COLUMNS")
+        print(self.results.columns.tolist())
+        print("=" * 80)
 
         self.results.sort_values(by=["company_id",
                     "year" ],inplace=True)
@@ -655,10 +695,7 @@ class RatioEngine:
     #-------------------------------------------------------------
     # Running the Engine
     #-------------------------------------------------------------
-    # -----------------------------------------------------
-    # Run Engine
-    # -----------------------------------------------------
-
+   
     def run(self):
 
         print()
