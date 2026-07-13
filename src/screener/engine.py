@@ -20,6 +20,8 @@ import numpy as np
 import pandas as pd
 import yaml
 from src.screener.presets import PRESETS
+from src.screener.scoring import Composite_Scorer
+
 
 #-----------------------------------------------------
 # Financial Sectors
@@ -81,11 +83,8 @@ class ScreenerEngine:
         
         df = ratios.copy()
         df = ( df.sort_values("year").groupby("company_id", as_index=False).tail(1)
-                .reset_index(drop=True)
-      
-      
-      
-)
+                .reset_index(drop=True))
+
         # ROE
         #-------------------------
         value= filters.get("roe_min")
@@ -218,6 +217,14 @@ class ScreenerEngine:
         df["composite_quality_score"] = score
 
         df = df.sort_values(by="composite_quality_score",
+            ascending=False).reset_index(drop=True)
+        
+        
+
+        df = Composite_Scorer.run(df)
+
+        df = df.sort_values(
+            by="composite_quality_score",
             ascending=False).reset_index(drop=True)
         
         return df
