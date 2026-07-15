@@ -1,17 +1,26 @@
 import sqlite3
-DB_PATH="data/nifty100.db"
+import pandas as pd
+from config.setting import DB_PATH
+
 conn = sqlite3.connect(DB_PATH)
 
-cursor = conn.cursor()
+tables = [
+    "stg_companies",
+    "stg_financial_ratios",
+    "stg_market_cap",
+    "stg_sectors"
+]
 
-cursor.execute("""
-SELECT name
-FROM sqlite_master
-WHERE type='table'
-ORDER BY name
-""")
+for table in tables:
+    print("\n" + "="*70)
+    print(table)
+    print("="*70)
 
-for table in cursor.fetchall():
-    print(table[0])
+    df = pd.read_sql(
+        f"SELECT * FROM {table} LIMIT 2",
+        conn
+    )
+
+    print(df.columns.tolist())
 
 conn.close()

@@ -212,3 +212,26 @@ def get_valuation(company_id):
     """
 
     return pd.DataFrame()
+
+@st.cache_data(ttl=600)
+def get_all_ratios():
+    return run_query("""
+        SELECT *
+        FROM stg_financial_ratios
+    """)
+
+
+@st.cache_data(ttl=600)
+def get_market_cap_all():
+    return run_query("""
+        SELECT *
+        FROM stg_market_cap
+    """)
+
+
+@st.cache_data(ttl=600)
+def get_sector_summary():
+    return run_query("""
+        SELECT *
+        FROM stg_sectors
+    """)
