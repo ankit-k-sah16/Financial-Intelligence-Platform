@@ -1,1698 +1,858 @@
 """
-=========================================================
-Company Profile
+===========================================================
 N100 Financial Intelligence Platform
-=========================================================
+
+Page 02 : Company Profile
+===========================================================
 """
-
-from pathlib import Path
-import sys
-
-PROJECT_ROOT = Path(__file__).resolve().parents[3]
-sys.path.append(str(PROJECT_ROOT))
 
 import streamlit as st
 import pandas as pd
 
-from src.dashboard.utils.db import get_peers
-
-
-
-
-from src.dashboard.utils.db import (
-    get_companies,
-    get_company,
-    get_ratios,
-    get_market_cap
-)
-
-from src.dashboard.components.charts import (
-    create_kpi_card,create_radar_chart
-)
-
 from src.dashboard.components.theme import (
     apply_theme,
     page_header,
-    section_header,
-    empty
+    section_header
+)
+
+from src.dashboard.utils.db import (
+    get_companies,
+    get_ratios
 )
 
 from src.dashboard.components.formatters import (
-    format_market_cap,
     format_percentage,
-    format_ratio
+    format_market_cap
+)
+
+from src.dashboard.components.charts import (
+    create_bar_chart,
+    create_multi_line_chart,
+    create_kpi_card,
+    show
 )
 
 # =========================================================
-# Theme
+# Page Configuration
 # =========================================================
+
+st.set_page_config(
+    page_title="Company Profile",
+    page_icon="📈",
+    layout="wide"
+)
 
 apply_theme()
 
 page_header(
-    "🏢 Company Profile",
-    "Detailed Financial Analysis"
+    "📈 Company Profile",
+    "Search and analyze any listed company."
 )
 
 # =========================================================
-# Load Companies
+# Load Company Master
 # =========================================================
 
-companies = get_companies()
+@st.cache_data(show_spinner=False)
+def load_company_master():
+
+    df = get_companies()
+
+    if df is None:
+        return pd.DataFrame()
+
+    return df
+
+
+companies = load_company_master()
+
+# =========================================================
+# Validate Data
+# =========================================================
 
 if companies.empty:
 
-    empty("No companies available.")
+    st.error(
+        "No company data found. Please load the database first."
+    )
 
     st.stop()
 
 # =========================================================
-# Sidebar Filters
+# Search Dataset
 # =========================================================
 
-with st.sidebar:
+companies = companies.copy()
 
-    st.header("Filters")
+companies["company_name"] = (
+    companies["company_name"]
+    .fillna("")
+    .astype(str)
+)
 
-    company_name = st.selectbox(
+companies["nse_profile"] = (
+    companies["nse_profile"]
+    .fillna("")
+    .astype(str)
+)
 
-        "Select Company",
+# ---------------------------------------
+# Extract NSE Symbol from URL
+# Example:
+# https://www.nseindia.com/get-quotes/equity?symbol=TCS
+# ----------------------------
 
-        companies["company_name"]
+companies["ticker"] = (
+
+    companies["nse_profile"]
+
+    .str.extract(
+
+        r"symbol=([^&]+)",
+
+        expand=False
 
     )
+
+    .fillna("")
+
+    .str.upper()
+
+)
+
+# Search Text
+
+companies["search_text"] = (
+
+    companies["company_name"]
+
+    + " ("
+
+    + companies["ticker"]
+
+    + ")"
+
+)
+
+# =========================================================
+# Company Search
+# =========================================================
+
+section_header("Search Company")
+
+selected_company = st.selectbox(
+
+    "Search by Company Name or NSE Ticker",
+
+    options=companies["search_text"],
+
+    index=None,
+
+    placeholder="Type company name or ticker..."
+
+)
+
+# =========================================================
+# Search Validation
+# =========================================================
+
+if selected_company is None:
+
+    st.info(
+
+        """
+        👈 Search for a company using its **name** or **NSE ticker**.
+
+        Examples:
+
+        • TCS
+
+        • INFY
+
+        • RELIANCE
+        """
+
+    )
+
+    st.stop()
 
 # =========================================================
 # Selected Company
 # =========================================================
 
-company_id = companies.loc[
-    companies["company_name"] == company_name,
-    "company_id"
-].iloc[0]
+company = companies.loc[
+    companies["search_text"] == selected_company].iloc[0]
 
-company = get_company(company_id)
 
-ratios = get_ratios(company_id)
+company_id = company["company_id"]
 
-market = get_market_cap(company_id)
+company_name = company["company_name"]
 
-if ratios.empty:
+ticker = company["ticker"]
 
-    empty("Financial ratios not available.")
-
-    st.stop()
+nse_profile = company["nse_profile"]
 
 # =========================================================
-# Financial Year
+# Latest Financial Record
 # =========================================================
 
-years = sorted(
+latest = ( ratios.sort_values("year").iloc[-1])
 
-    ratios["year"].unique(),
 
-    reverse=True
+company_logo = company.get("company_logo", "")
 
-)
+sector = latest.get("broad_sector", "N/A")
 
-selected_year = st.selectbox(
+sub_sector = latest.get("sub_sector", "N/A")
 
-    "Financial Year",
+website = company.get("website", "")
 
-    years
-
-)
-
-ratio = ratios[
-    ratios["year"] == selected_year
-].iloc[0]
+about = company.get("about_company", "No company description available.")
 
 # =========================================================
-# Company Information
+# Company Profile
 # =========================================================
 
-section_header("Company Overview")
+section_header("Company Profile")
 
-left, right = st.columns([1, 3])
+left, right = st.columns([1, 4])
+
+# =========================================================
+# Company Logo
+# =========================================================
 
 with left:
 
-    logo = company.iloc[0]["company_logo"]
-
-    if pd.notna(logo):
+    if (
+        isinstance(company_logo, str)
+        and company_logo.strip()
+    ):
 
         st.image(
 
-            logo,
+            company_logo,
 
             width=120
 
         )
 
+    else:
+
+        st.info("No Logo")
+
+# =========================================================
+# Company Information
+# =========================================================
 with right:
 
-    st.subheader(
+    st.markdown(
 
-        company.iloc[0]["company_name"]
-
-    )
-
-    st.write(
-
-        company.iloc[0]["about_company"]
+        f"## {company_name}"
 
     )
 
-    if pd.notna(company.iloc[0]["website"]):
+    st.markdown(
 
-        st.markdown(
+        f"**Sector:** {sector}"
 
-            f"[🌐 Website]({company.iloc[0]['website']})"
+    )
 
-        )
+    st.markdown(
+
+        f"**Sub-Sector:** {sub_sector}"
+
+    )
+
+    st.markdown(
+
+        f"**NSE Symbol:** `{ticker}`"
+
+    )
+
+# =========================================================
+# Company Links
+# =========================================================
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+
+        if (
+            isinstance(website, str)
+            and website.strip()
+        ):
+
+            st.markdown(
+
+                f"🌐 [Company Website]({website})"
+
+            )
+
+    with col2:
+
+        if (
+            isinstance(nse_profile, str)
+            and nse_profile.strip()
+        ):
+
+            st.markdown(
+
+                f"📈 [NSE Profile]({nse_profile})"
+
+            )
+
+# =========================================================
+# About Company
+# =========================================================
+
+st.markdown("### About Company")
+
+st.info(
+
+    about
+
+)
+
+# =========================================================
+# Financial KPI Dashboard
+# =========================================================
+
+section_header("Key Financial Indicators")
+
+latest = ratios.sort_values("year").iloc[-1]
 
 # =========================================================
 # KPI Cards
 # =========================================================
 
-section_header("Key Financial Metrics")
-
-market_cap = None
-
-if not market.empty:
-
-    latest_market = market.sort_values(
-
-        "year"
-
-    ).iloc[-1]
-
-    market_cap = latest_market["market_cap_crore"]
-
 col1, col2, col3 = st.columns(3)
+col4, col5, col6 = st.columns(3)
 
 with col1:
 
     create_kpi_card(
-
-        "Market Cap",
-
-        format_market_cap(market_cap)
-
-        if market_cap is not None
-
-        else "-"
-
+        title="ROE",
+        value=format_percentage(
+            latest["return_on_equity_pct"]
+        )
     )
 
 with col2:
 
     create_kpi_card(
-
-        "ROE",
-
-        format_percentage(
-
-            ratio["return_on_equity_pct"]
-
+        title="ROCE",
+        value=format_percentage(
+            latest["return_on_capital_employed_pct"]
         )
-
     )
 
 with col3:
 
     create_kpi_card(
-
-        "ROCE",
-
-        format_percentage(
-
-            ratio["return_on_capital_employed_pct"]
-
+        title="Net Profit Margin",
+        value=format_percentage(
+            latest["net_profit_margin_pct"]
         )
-
     )
-
-col4, col5, col6 = st.columns(3)
 
 with col4:
 
     create_kpi_card(
-
-        "P/E",
-
-        format_ratio(
-
-            ratio["pe"]
-
-        )
-
+        title="Debt / Equity",
+        value=f"{latest['debt_to_equity']:.2f}"
     )
 
 with col5:
 
     create_kpi_card(
-
-        "P/B",
-
-        format_ratio(
-
-            ratio["pb"]
-
+        title="Revenue CAGR (5Y)",
+        value=format_percentage(
+            latest["revenue_cagr_5yr"]
         )
-
     )
 
 with col6:
 
     create_kpi_card(
-
-        "Dividend Yield",
-
-        format_percentage(
-
-            ratio["dividend_yield"]
-
+        title="Free Cash Flow",
+        value=format_market_cap(
+            latest["free_cash_flow_cr"]
         )
-
     )
 
 # =========================================================
-# Business Summary
+# KPI Summary
 # =========================================================
 
-section_header("Business Summary")
-
-summary_left, summary_right = st.columns(2)
-
-with summary_left:
-
-    st.write("**Broad Sector**")
-
-    st.success(
-
-        ratio["broad_sector"]
-
-    )
-
-    st.write("**Company Rating**")
-
-    st.info(
-
-        ratio["company_rating"]
-
-    )
-
-with summary_right:
-
-    st.write("**Financial Health**")
-
-    st.success(
-
-        ratio["financial_health"]
-
-    )
-
-    st.write("**Latest Financial Year**")
-
-    st.info(
-
-        selected_year
-
-    )
-
-# =========================================================
-# Snapshot Table
-# =========================================================
-
-section_header("Current Year Snapshot")
-
-snapshot = pd.DataFrame({
-
-    "Metric":[
-
-        "Revenue",
-
-        "Operating Profit",
-
-        "Net Profit",
-
-        "EPS",
-
-        "Debt / Equity",
-
-        "Interest Coverage",
-
-        "Asset Turnover",
-
-        "Free Cash Flow"
-
-    ],
-
-    "Value":[
-
-        ratio["sales"],
-
-        ratio["operating_profit"],
-
-        ratio["net_profit"],
-
-        ratio["earnings_per_share"],
-
-        ratio["debt_to_equity"],
-
-        ratio["interest_coverage"],
-
-        ratio["asset_turnover"],
-
-        ratio["free_cash_flow_cr"]
-
-    ]
-
-})
-
-st.dataframe(
-
-    snapshot,
-
-    use_container_width=True,
-
-    hide_index=True
-
+st.caption(
+    "Values shown are based on the latest available financial year."
 )
 
 # =========================================================
-# Financial Performance Trends
+# Revenue & Profit Trends
 # =========================================================
 
-from src.dashboard.utils.charts import (
-    create_line_chart,
-    create_multi_line_chart,
-    show
-)
+section_header("10-Year Financial Performance")
 
-section_header("Financial Performance Trends")
-
-financial_trend = ratios.sort_values("year")
-
-tab1, tab2 = st.tabs(
-    [
-        "Income Statement",
-        "Profitability"
-    ]
-)
+trend_df = ( ratios .sort_values("year") .copy())
 
 # =========================================================
-# Income Statement
+# Prepare Chart Data
 # =========================================================
 
-with tab1:
+trend_df["year"] = trend_df["year"].astype(str)
 
-    col1, col2 = st.columns(2)
-
-    with col1:
-
-        fig = create_line_chart(
-
-            financial_trend,
-
-            x="year",
-
-            y="sales",
-
-            title="Revenue Trend"
-
-        )
-
-        show(fig)
-
-    with col2:
-
-        fig = create_line_chart(
-
-            financial_trend,
-
-            x="year",
-
-            y="operating_profit",
-
-            title="Operating Profit Trend"
-
-        )
-
-        show(fig)
-
-    st.markdown("")
-
-    col3, col4 = st.columns(2)
-
-    with col3:
-
-        fig = create_line_chart(
-
-            financial_trend,
-
-            x="year",
-
-            y="net_profit",
-
-            title="Net Profit Trend"
-
-        )
-
-        show(fig)
-
-    with col4:
-
-        fig = create_line_chart(
-
-            financial_trend,
-
-            x="year",
-
-            y="earnings_per_share",
-
-            title="EPS Trend"
-
-        )
-
-        show(fig)
-
-
-# =========================================================
-# Profitability
-# =========================================================
-
-with tab2:
-
-    fig = create_multi_line_chart(
-
-        financial_trend,
-
-        x="year",
-
-        y_columns=[
-
-            "return_on_equity_pct",
-
-            "return_on_capital_employed_pct",
-
-            "net_profit_margin_pct",
-
-            "operating_profit_margin_pct"
-
-        ],
-
-        title="Profitability Trend"
-
-    )
-
-    show(fig)
-
-# =========================================================
-# Growth Trends
-# =========================================================
-
-section_header("Growth Analysis")
-
-col1, col2 = st.columns(2)
-
-with col1:
-
-    fig = create_multi_line_chart(
-
-        financial_trend,
-
-        x="year",
-
-        y_columns=[
-
-            "revenue_cagr_5yr",
-
-            "pat_cagr_5yr",
-
-            "eps_cagr_5yr"
-
-        ],
-
-        title="Growth CAGR"
-
-    )
-
-    show(fig)
-
-with col2:
-
-    growth = financial_trend[
-
-        [
-
-            "year",
-
-            "revenue_cagr_5yr",
-
-            "pat_cagr_5yr",
-
-            "eps_cagr_5yr"
-
-        ]
-
-    ]
-
-    st.dataframe(
-
-        growth,
-
-        use_container_width=True,
-
-        hide_index=True
-
-    )
-
-# =========================================================
-# Margin Analysis
-# =========================================================
-
-section_header("Margin Analysis")
-
-col1, col2 = st.columns(2)
-
-with col1:
-
-    fig = create_multi_line_chart(
-
-        financial_trend,
-
-        x="year",
-
-        y_columns=[
-
-            "net_profit_margin_pct",
-
-            "operating_profit_margin_pct"
-
-        ],
-
-        title="Margin Trend"
-
-    )
-
-    show(fig)
-
-with col2:
-
-    margin_table = financial_trend[
-
-        [
-
-            "year",
-
-            "net_profit_margin_pct",
-
-            "operating_profit_margin_pct"
-
-        ]
-
-    ]
-
-    margin_table.columns = [
-
-        "Year",
-
-        "Net Profit Margin",
-
-        "Operating Margin"
-
-    ]
-
-    st.dataframe(
-
-        margin_table,
-
-        use_container_width=True,
-
-        hide_index=True
-
-    )
-
-# =========================================================
-# Profitability Summary
-# =========================================================
-
-section_header("Latest Profitability Snapshot")
-
-summary = pd.DataFrame({
-
-    "Metric":[
-
-        "ROE",
-
-        "ROCE",
-
-        "ROA",
-
-        "Net Profit Margin",
-
-        "Operating Margin"
-
-    ],
-
-    "Latest Value":[
-
-        ratio["return_on_equity_pct"],
-
-        ratio["return_on_capital_employed_pct"],
-
-        ratio["return_on_assets_pct"],
-
-        ratio["net_profit_margin_pct"],
-
-        ratio["operating_profit_margin_pct"]
-
-    ]
-
-})
-
-st.dataframe(
-
-    summary,
-
-    use_container_width=True,
-
-    hide_index=True
-
-)
-
-# =========================================================
-# Balance Sheet Analysis
-# =========================================================
-
-from src.dashboard.utils.db import get_bs
-
-section_header("Balance Sheet Analysis")
-
-bs = get_bs(company_id)
-
-if not bs.empty:
-
-    bs = bs.sort_values("year")
-
-    tab1, tab2 = st.tabs(
-        [
-            "Charts",
-            "Snapshot"
-        ]
-    )
-
-    with tab1:
-
-        col1, col2 = st.columns(2)
-
-        with col1:
-
-            fig = create_multi_line_chart(
-
-                bs,
-
-                x="year",
-
-                y_columns=[
-
-                    "equity_share_capital",
-
-                    "reserves"
-
-                ],
-
-                title="Equity & Reserves"
-
-            )
-
-            show(fig)
-
-        with col2:
-
-            fig = create_line_chart(
-
-                bs,
-
-                x="year",
-
-                y="borrowings",
-
-                title="Borrowings Trend"
-
-            )
-
-            show(fig)
-
-    with tab2:
-
-        bs_snapshot = bs.tail(1)[
-
-            [
-
-                "equity_share_capital",
-
-                "reserves",
-
-                "borrowings",
-
-                "investments",
-
-                "total_assets"
-
-            ]
-
-        ].T
-
-        bs_snapshot.columns = ["Latest"]
-
-        st.dataframe(
-
-            bs_snapshot,
-
-            use_container_width=True
-
-        )
-
-# =========================================================
-# Cash Flow Analysis
-# =========================================================
-
-from src.dashboard.utils.db import get_cf
-
-section_header("Cash Flow Analysis")
-
-cf = get_cf(company_id)
-
-if not cf.empty:
-
-    cf = cf.sort_values("year")
-
-    tab1, tab2 = st.tabs(
-        [
-            "Cash Flow Trends",
-            "Cash Flow Breakdown"
-        ]
-    )
-
-    # -----------------------------------------------------
-    # Cash Flow Charts
-    # -----------------------------------------------------
-
-    with tab1:
-
-        col1, col2 = st.columns(2)
-
-        with col1:
-
-            fig = create_multi_line_chart(
-
-                cf,
-
-                x="year",
-
-                y_columns=[
-                    "operating_activity",
-                    "investing_activity",
-                    "financing_activity"
-                ],
-
-                title="Cash Flow Components"
-
-            )
-
-            show(fig)
-
-        with col2:
-
-            fig = create_line_chart(
-
-                ratios.sort_values("year"),
-
-                x="year",
-
-                y="free_cash_flow_cr",
-
-                title="Free Cash Flow Trend"
-
-            )
-
-            show(fig)
-
-    # -----------------------------------------------------
-    # Cash Flow Table
-    # -----------------------------------------------------
-
-    with tab2:
-
-        latest_cf = cf.tail(1)
-
-        cash_table = latest_cf[
-
-            [
-
-                "operating_activity",
-
-                "investing_activity",
-
-                "financing_activity"
-
-            ]
-
-        ].T
-
-        cash_table.columns = ["Latest"]
-
-        st.dataframe(
-
-            cash_table,
-
-            use_container_width=True
-
-        )
-
-else:
-
-    st.info("Cash Flow data not available.")
-
-# =========================================================
-# Capital Allocation Analysis
-# =========================================================
-
-section_header("Capital Allocation Analysis")
-
-capital_df = ratios.sort_values("year")
-
-tab1, tab2 = st.tabs(
-    [
-        "Capital Allocation",
-        "Efficiency Metrics"
-    ]
-)
-
-# ---------------------------------------------------------
-# Capital Allocation Charts
-# ---------------------------------------------------------
-
-with tab1:
-
-    col1, col2 = st.columns(2)
-
-    with col1:
-
-        fig = create_multi_line_chart(
-
-            capital_df,
-
-            x="year",
-
-            y_columns=[
-                "free_cash_flow_cr",
-                "cash_from_operations_cr"
-            ],
-
-            title="Free Cash Flow vs CFO"
-
-        )
-
-        show(fig)
-
-    with col2:
-
-        fig = create_line_chart(
-
-            capital_df,
-
-            x="year",
-
-            y="fcf_conversion_rate",
-
-            title="FCF Conversion Rate"
-
-        )
-
-        show(fig)
-
-# ---------------------------------------------------------
-# Capital Allocation Metrics
-# ---------------------------------------------------------
-
-with tab2:
-
-    latest = capital_df.iloc[-1]
-
-    c1, c2 = st.columns(2)
-
-    with c1:
-
-        st.metric(
-
-            "Capital Allocation Pattern",
-
-            latest["capital_allocation_pattern"]
-
-        )
-
-        st.metric(
-
-            "CFO Quality Score",
-
-            round(
-
-                latest["cfo_quality_score"],
-
-                2
-
-            )
-
-        )
-
-        st.metric(
-
-            "CFO Quality Label",
-
-            latest["cfo_quality_label"]
-
-        )
-
-    with c2:
-
-        st.metric(
-
-            "FCF Conversion",
-
-            f"{latest['fcf_conversion_rate']:.2f}"
-
-        )
-
-        st.metric(
-
-            "CapEx",
-
-            f"₹{latest['capex_cr']:,.2f} Cr"
-
-        )
-
-        st.metric(
-
-            "CapEx Label",
-
-            latest["capex_label"]
-
-        )
-
-capital_table = capital_df[
+chart_data = trend_df[
 
     [
 
         "year",
-
-        "free_cash_flow_cr",
-
-        "cash_from_operations_cr",
-
-        "fcf_conversion_rate",
-
-        "capital_allocation_pattern",
-
-        "cfo_quality_score",
-
-        "cfo_quality_label",
-
-        "capex_cr"
-
-    ]
-
-].copy()
-
-capital_table.columns = [
-
-    "Year",
-
-    "Free Cash Flow",
-
-    "Cash From Operations",
-
-    "FCF Conversion",
-
-    "Capital Allocation",
-
-    "CFO Score",
-
-    "CFO Label",
-
-    "CapEx"
-
-]
-
-st.dataframe(
-
-    capital_table,
-
-    use_container_width=True,
-
-    hide_index=True
-
-)
-
-# =========================================================
-# Debt & Financial Strength
-# =========================================================
-
-section_header("Debt & Financial Strength")
-
-debt_df = ratios.sort_values("year")
-
-tab1, tab2 = st.tabs(
-    [
-        "Debt Trends",
-        "Debt Metrics"
-    ]
-)
-
-# ---------------------------------------------------------
-# Debt Trend Charts
-# ---------------------------------------------------------
-
-with tab1:
-
-    col1, col2 = st.columns(2)
-
-    with col1:
-
-        fig = create_multi_line_chart(
-
-            debt_df,
-
-            x="year",
-
-            y_columns=[
-                "borrowings",
-                "net_debt"
-            ],
-
-            title="Borrowings vs Net Debt"
-
-        )
-
-        show(fig)
-
-    with col2:
-
-        fig = create_multi_line_chart(
-
-            debt_df,
-
-            x="year",
-
-            y_columns=[
-                "debt_to_equity",
-                "interest_coverage"
-            ],
-
-            title="Debt/Equity & Interest Coverage"
-
-        )
-
-        show(fig)
-
-
-# ---------------------------------------------------------
-# Latest Financial Strength
-# ---------------------------------------------------------
-
-with tab2:
-
-    latest = debt_df.iloc[-1]
-
-    c1, c2, c3 = st.columns(3)
-
-    with c1:
-
-        create_kpi_card(
-
-            "Debt / Equity",
-
-            format_ratio(
-
-                latest["debt_to_equity"]
-
-            )
-
-        )
-
-    with c2:
-
-        icr = latest["interest_coverage"]
-
-        if isinstance(icr, str):
-
-            create_kpi_card(
-
-                "Interest Coverage",
-
-                icr
-
-            )
-
-        else:
-
-            create_kpi_card(
-
-                "Interest Coverage",
-
-                format_ratio(icr)
-
-            )
-
-    with c3:
-
-        create_kpi_card(
-
-            "Net Debt",
-
-            format_market_cap(
-
-                latest["net_debt"]
-
-            )
-
-        )
-
-    st.markdown("")
-
-# ---------------------------------------------------------
-# Health Indicators
-# ---------------------------------------------------------
-
-left, right = st.columns(2)
-
-with left:
-
-    st.metric(
-
-        "High Leverage Flag",
-
-        latest["high_leverage_flag"]
-
-    )
-
-    st.metric(
-
-        "ICR Warning",
-
-        latest["icr_warning_flag"]
-
-    )
-
-with right:
-
-    st.metric(
-
-        "ICR Label",
-
-        latest["icr_label"]
-
-    )
-
-    st.metric(
-
-        "Debt Declining",
-
-        latest["debt_declining"]
-
-    )
-
-
-# ---------------------------------------------------------
-# Debt Analysis Table
-# ---------------------------------------------------------
-
-debt_table = debt_df[
-
-    [
-
-        "year",
-
-        "borrowings",
-
-        "net_debt",
-
-        "debt_to_equity",
-
-        "interest_coverage",
-
-        "high_leverage_flag",
-
-        "icr_label",
-
-        "financial_health"
-
-    ]
-
-].copy()
-
-debt_table.columns = [
-
-    "Year",
-
-    "Borrowings",
-
-    "Net Debt",
-
-    "Debt / Equity",
-
-    "Interest Coverage",
-
-    "High Leverage",
-
-    "ICR Status",
-
-    "Financial Health"
-
-]
-
-st.dataframe(
-
-    debt_table,
-
-    use_container_width=True,
-
-    hide_index=True
-
-)
-
-# =========================================================
-# Financial Statement Summary
-# =========================================================
-
-section_header("Financial Statement Summary")
-
-latest_ratio = ratios.sort_values("year").iloc[-1]
-
-summary = pd.DataFrame({
-
-    "Financial Area": [
-
-        "Revenue",
-        "Operating Profit",
-        "Net Profit",
-        "Operating Cash Flow",
-        "Free Cash Flow",
-        "Borrowings",
-        "Net Debt",
-        "Market Capitalisation"
-
-    ],
-
-    "Latest Value": [
-
-        latest_ratio["sales"],
-        latest_ratio["operating_profit"],
-        latest_ratio["net_profit"],
-        latest_ratio["cash_from_operations_cr"],
-        latest_ratio["free_cash_flow_cr"],
-        latest_ratio["borrowings"],
-        latest_ratio["net_debt"],
-        latest_ratio["market_cap"]
-
-    ]
-
-})
-
-st.dataframe(
-
-    summary,
-
-    use_container_width=True,
-
-    hide_index=True
-
-)
-
-# =========================================================
-# Financial Scorecard
-# =========================================================
-
-section_header("Financial Performance Scorecard")
-
-c1, c2, c3, c4 = st.columns(4)
-
-with c1:
-
-    create_kpi_card(
-
-        "Composite Score",
-
-        f"{latest_ratio['composite_quality_score']:.1f}"
-
-    )
-
-with c2:
-
-    create_kpi_card(
-
-        "Company Rating",
-
-        latest_ratio["company_rating"]
-
-    )
-
-with c3:
-
-    create_kpi_card(
-
-        "Financial Health",
-
-        latest_ratio["financial_health"]
-
-    )
-
-with c4:
-
-    create_kpi_card(
-
-        "CFO Quality",
-
-        latest_ratio["cfo_quality_label"]
-
-    )
-
-# =========================================================
-# Key Financial Highlights
-# =========================================================
-
-section_header("Key Financial Highlights")
-
-left, right = st.columns(2)
-
-with left:
-
-    st.success(f"""
-
-### Growth
-
-• Revenue CAGR (5Y): **{latest_ratio['revenue_cagr_5yr']:.2f}%**
-
-• PAT CAGR (5Y): **{latest_ratio['pat_cagr_5yr']:.2f}%**
-
-• EPS CAGR (5Y): **{latest_ratio['eps_cagr_5yr']:.2f}%**
-
-""")
-
-with right:
-
-    st.info(f"""
-
-### Profitability
-
-• ROE: **{latest_ratio['return_on_equity_pct']:.2f}%**
-
-• ROCE: **{latest_ratio['return_on_capital_employed_pct']:.2f}%**
-
-• Net Margin: **{latest_ratio['net_profit_margin_pct']:.2f}%**
-
-""")
-    
-
-# =========================================================
-# Latest Financial Snapshot
-# =========================================================
-
-section_header("Latest Financial Snapshot")
-
-snapshot = latest_ratio[
-
-    [
 
         "sales",
 
-        "operating_profit",
-
-        "net_profit",
-
-        "return_on_equity_pct",
-
-        "return_on_capital_employed_pct",
-
-        "debt_to_equity",
-
-        "interest_coverage",
-
-        "asset_turnover",
-
-        "free_cash_flow_cr",
-
-        "market_cap"
+        "net_profit"
 
     ]
 
-].to_frame()
-
-snapshot.columns = ["Latest"]
-
-st.dataframe(
-
-    snapshot,
-
-    use_container_width=True
-
-)
+]
 
 # =========================================================
-# Peer Comparison
+# Revenue & Net Profit Charts
 # =========================================================
 
-section_header("Peer Comparison")
+col1, col2 = st.columns(2)
 
-peer_group = ratio["broad_sector"]
+with col1:
 
-peer_df = get_peers(peer_group)
+    fig = create_bar_chart(
 
-if peer_df.empty:
+        df=chart_data,
 
-    st.warning(
-        "No peer group available for this company."
-    )
+        x="year",
 
-else:
+        y="sales",
 
-    st.success(
-        f"Peer Group : {peer_group}"
-    )
+        title="Revenue (10 Years)",
 
-    # -----------------------------------------------------
-    # Company Rank
-    # -----------------------------------------------------
+        x_title="Financial Year",
 
-    latest_year = peer_df["year"].max()
-
-    peer_latest = peer_df[
-        peer_df["year"] == latest_year
-    ].copy()
-
-    peer_latest = peer_latest.sort_values(
-
-        "composite_quality_score",
-
-        ascending=False
-
-    ).reset_index(drop=True)
-
-    peer_latest["Rank"] = (
-
-        peer_latest.index + 1
-
-    )
-
-    company_rank = peer_latest.loc[
-
-        peer_latest["company_id"] == company_id,
-
-        "Rank"
-
-    ]
-
-    if not company_rank.empty:
-
-        st.info(
-
-            f"Peer Rank : {company_rank.iloc[0]} / {len(peer_latest)}"
-
-        )
-
-    # -----------------------------------------------------
-    # Radar Chart
-    # -----------------------------------------------------
-
-    radar_metrics = [
-
-        "return_on_equity_pct",
-
-        "return_on_capital_employed_pct",
-
-        "net_profit_margin_pct",
-
-        "debt_to_equity",
-
-        "free_cash_flow_cr",
-
-        "pat_cagr_5yr",
-
-        "revenue_cagr_5yr",
-
-        "composite_quality_score"
-
-    ]
-
-    radar_labels = [
-
-        "ROE",
-
-        "ROCE",
-
-        "NPM",
-
-        "D/E",
-
-        "FCF",
-
-        "PAT CAGR",
-
-        "Revenue CAGR",
-
-        "Quality"
-
-    ]
-
-    company_values = []
-
-    peer_values = []
-
-    for metric in radar_metrics:
-
-        company_values.append(
-
-            latest_ratio.get(metric, 0)
-
-        )
-
-        peer_values.append(
-
-            peer_latest[metric].mean()
-
-        )
-
-    fig = create_radar_chart(
-
-        company_values,
-
-        peer_values,
-
-        radar_labels,
-
-        title="Company vs Peer Average"
+        y_title="Revenue"
 
     )
 
     show(fig)
 
-    # -----------------------------------------------------
-    # Peer Summary
-    # -----------------------------------------------------
+with col2:
 
-    st.markdown("### Peer Summary")
+    fig = create_bar_chart(
 
-    peer_summary = peer_latest[
+        df=chart_data,
 
-        [
+        x="year",
 
-            "company_name",
+        y="net_profit",
 
-            "composite_quality_score",
+        title="Net Profit (10 Years)",
 
-            "company_rating",
+        x_title="Financial Year",
 
-            "financial_health"
+        y_title="Net Profit"
 
-        ]
+    )
+
+    show(fig)
+
+# =========================================================
+# Financial Trend Summary
+# =========================================================
+
+latest_revenue = trend_df.iloc[-1]["sales"]
+latest_profit = trend_df.iloc[-1]["net_profit"]
+
+col1, col2 = st.columns(2)
+
+with col1:
+
+    st.metric(
+
+        label="Latest Revenue",
+
+        value=format_market_cap(latest_revenue)
+
+    )
+
+with col2:
+
+    st.metric(
+
+        label="Latest Net Profit",
+
+        value=format_market_cap(latest_profit)
+
+    )
+
+# =========================================================
+# PART 5 : ROE vs ROCE Trend Analysis
+# =========================================================
+
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
+
+
+section_header("ROE vs ROCE Trend (10 Years)")
+
+# ---------------------------------------------------------
+# Prepare Data
+# ---------------------------------------------------------
+
+performance_df = ( ratios.copy().sort_values("year"))
+
+
+performance_df = performance_df[
+
+    [
+
+        "year",
+
+        "return_on_equity_pct",
+
+        "return_on_capital_employed_pct"
 
     ]
 
-    st.dataframe(
+].dropna()
 
-        peer_summary,
+performance_df["year"] = performance_df["year"].astype(str)
 
-        use_container_width=True,
+# ---------------------------------------------------------
+# Validate Data
+# ---------------------------------------------------------
 
-        hide_index=True
+if performance_df.empty:
+
+    st.warning(
+
+        "ROE / ROCE data is not available."
+
+    )
+
+else:
+
+    # -----------------------------------------------------
+    # Create Figure
+    # -----------------------------------------------------
+
+    fig = make_subplots(
+
+        specs=[[{"secondary_y": True}]]
 
     )
 
     # -----------------------------------------------------
-    # Company vs Peer
+    # ROE
     # -----------------------------------------------------
 
-    comparison = pd.DataFrame({
+    fig.add_trace(
 
-        "Metric":[
+        go.Scatter(
 
-            "ROE",
+            x=performance_df["year"],
 
-            "ROCE",
+            y=performance_df["return_on_equity_pct"],
 
-            "NPM",
+            mode="lines+markers",
 
-            "PAT CAGR",
+            name="ROE (%)",
 
-            "Revenue CAGR",
+            line=dict(width=3),
 
-            "Quality Score"
+            marker=dict(size=8)
 
-        ],
+        ),
 
-        "Company":[
-
-            latest_ratio["return_on_equity_pct"],
-
-            latest_ratio["return_on_capital_employed_pct"],
-
-            latest_ratio["net_profit_margin_pct"],
-
-            latest_ratio["pat_cagr_5yr"],
-
-            latest_ratio["revenue_cagr_5yr"],
-
-            latest_ratio["composite_quality_score"]
-
-        ],
-
-        "Peer Average":[
-
-            peer_latest["return_on_equity_pct"].mean(),
-
-            peer_latest["return_on_capital_employed_pct"].mean(),
-
-            peer_latest["net_profit_margin_pct"].mean(),
-
-            peer_latest["pat_cagr_5yr"].mean(),
-
-            peer_latest["revenue_cagr_5yr"].mean(),
-
-            peer_latest["composite_quality_score"].mean()
-
-        ]
-
-    })
-
-    st.dataframe(
-
-        comparison,
-
-        use_container_width=True,
-
-        hide_index=True
+        secondary_y=False
 
     )
+
+    # -----------------------------------------------------
+    # ROCE
+    # -----------------------------------------------------
+
+    fig.add_trace(
+
+        go.Scatter(
+
+            x=performance_df["year"],
+
+            y=performance_df["return_on_capital_employed_pct"],
+
+            mode="lines+markers",
+
+            name="ROCE (%)",
+
+            line=dict(width=3),
+
+            marker=dict(size=8)
+
+        ),
+
+        secondary_y=True
+
+    )
+
+    # -----------------------------------------------------
+    # Layout
+    # -----------------------------------------------------
+
+    fig.update_layout(
+
+        title="ROE vs ROCE (10-Year Trend)",
+
+        template="plotly_white",
+
+        hovermode="x unified",
+
+        height=500,
+
+        legend=dict(
+
+            orientation="h",
+
+            yanchor="bottom",
+
+            y=1.02,
+
+            xanchor="right",
+
+            x=1
+
+        ),
+
+        margin=dict(
+
+            l=30,
+
+            r=30,
+
+            t=60,
+
+            b=30
+
+        )
+
+    )
+
+    fig.update_xaxes(
+
+        title_text="Financial Year",
+
+        showgrid=False
+
+    )
+
+    fig.update_yaxes(
+
+        title_text="ROE (%)",
+
+        secondary_y=False,
+
+        showgrid=True,
+
+        zeroline=False
+
+    )
+
+    fig.update_yaxes(
+
+        title_text="ROCE (%)",
+
+        secondary_y=True,
+
+        showgrid=False,
+
+        zeroline=False
+
+    )
+
+    # -----------------------------------------------------
+    # Display Chart
+    # -----------------------------------------------------
+
+    st.plotly_chart(
+
+        fig,
+
+        use_container_width=True
+
+    )
+
+    # -----------------------------------------------------
+    # Latest Metrics
+    # -----------------------------------------------------
+
+    latest = performance_df.iloc[-1]
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+
+        st.metric(
+
+            "Latest ROE",
+
+            f"{latest['return_on_equity_pct']:.2f}%"
+
+        )
+
+    with col2:
+
+        st.metric(
+
+            "Latest ROCE",
+
+            f"{latest['return_on_capital_employed_pct']:.2f}%"
+
+        )
+
+# =========================================================
+# Pros & Cons Analysis
+# =========================================================
+
+section_header("Pros & Cons")
+
+# =========================================================
+# Load Pros & Cons
+# =========================================================
+
+pros_cons_df = get_pros_cons(company_id)
+
+# =========================================================
+# Validate Data
+# =========================================================
+
+if pros_cons_df.empty:
+
+    st.info(
+
+        "No Pros & Cons available for this company."
+
+    )
+
+else:
+
+    # -----------------------------------------------------
+    # Normalize Type Column
+    # -----------------------------------------------------
+
+    pros_cons_df["type"] = (
+
+        pros_cons_df["type"]
+
+        .astype(str)
+
+        .str.strip()
+
+        .str.lower()
+
+    )
+
+    # -----------------------------------------------------
+    # Split Pros & Cons
+    # -----------------------------------------------------
+
+    pros = pros_cons_df.loc[
+
+        pros_cons_df["type"] == "pro",
+
+        "description"
+
+    ].dropna().tolist()
+
+    cons = pros_cons_df.loc[
+
+        pros_cons_df["type"] == "con",
+
+        "description"
+
+    ].dropna().tolist()
+
+    # -----------------------------------------------------
+    # Layout
+    # -----------------------------------------------------
+
+    col1, col2 = st.columns(2)
+
+    # =====================================================
+    # Pros
+    # =====================================================
+
+    with col1:
+
+        st.success("### ✅ Strengths")
+
+        if len(pros) == 0:
+
+            st.write("No strengths available.")
+
+        else:
+
+            for item in pros:
+
+                st.markdown(
+
+                    f"""
+                    <div style="
+                        background-color:#eaf7ea;
+                        border-left:6px solid #28a745;
+                        padding:10px;
+                        margin-bottom:10px;
+                        border-radius:8px;
+                    ">
+                        ✅ {item}
+                    </div>
+                    """,
+
+                    unsafe_allow_html=True
+
+                )
+
+    # =====================================================
+    # Cons
+    # =====================================================
+
+    with col2:
+
+        st.error("### ❌ Weaknesses")
+
+        if len(cons) == 0:
+
+            st.write("No weaknesses available.")
+
+        else:
+
+            for item in cons:
+
+                st.markdown(
+
+                    f"""
+                    <div style="
+                        background-color:#fdeaea;
+                        border-left:6px solid #dc3545;
+                        padding:10px;
+                        margin-bottom:10px;
+                        border-radius:8px;
+                    ">
+                        ❌ {item}
+                    </div>
+                    """,
+
+                    unsafe_allow_html=True
+
+                )
+
+    
+
+   
+
+   
+

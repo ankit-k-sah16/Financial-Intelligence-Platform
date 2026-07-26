@@ -20,9 +20,9 @@ WARNING="#F59E08"
 INFO="#0EA5E9"
 LIGHT="#F8FAFC"
 DARK="#0F172A"
-CARD="#FFFFFF"
+CARD="#B47979"
 TEXT="#1E293B"
-BACKGROUND="#F8FAFC"
+BACKGROUND="#5485B7"
 BORDER="#E2E8F0"
 
 # =========================================================

@@ -61,7 +61,7 @@ latest_ratios = (
 
 latest_market_cap = (
     market_cap.sort_values("year")
-    .groupby("campany_id").tail(1)
+    .groupby("company_id").tail(1)
 )
 
 #================================================================

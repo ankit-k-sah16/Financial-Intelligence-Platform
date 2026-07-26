@@ -135,10 +135,21 @@ def run_pipeline():
         index=False
 )
     
-    print("Load audit saved to output/load_audit.csv")
+from src.analytics.valuation import ValuationAnalytics
+
+valuation_engine = ValuationAnalytics(output_dir="output")
+
+valuation_engine.compute(
+    companies_df=companies_df,
+    ratios_df=financial_ratios_df,
+    market_cap_df=market_cap_df,
+    cashflow_df=cashflow_df
+)
+    
+print("Load audit saved to output/load_audit.csv")
     
 
-    print("Pipeline completed successfully.")
+print("Pipeline completed successfully.")
 
 
 

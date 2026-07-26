@@ -57,9 +57,12 @@ def get_companies():
     return run_query(
         """
         SELECT
-            company_id,
+            id AS company_id,
             company_name,
-            broad_sector
+            company_logo,
+            nse_profile,
+            website,
+            about_company
         FROM stg_companies
         ORDER BY company_name
         """
@@ -235,3 +238,64 @@ def get_sector_summary():
         SELECT *
         FROM stg_sectors
     """)
+
+# =========================================================
+# Peer Comparison Data
+# =========================================================
+
+@st.cache_data(ttl=600)
+def get_peer_comparison(group_name):
+
+    return run_query(
+        """
+        SELECT
+
+            pg.peer_group_name,
+
+            c.company_id,
+
+            c.company_name,
+
+            c.broad_sector,
+
+            c.sub_sector,
+
+            fr.market_cap_crore,
+
+            fr.return_on_equity_pct,
+
+            fr.return_on_capital_employed_pct,
+
+            fr.operating_profit_margin_pct,
+
+            fr.revenue_cagr_5yr,
+
+            fr.pat_cagr_5yr,
+
+            fr.debt_to_equity,
+
+            fr.dividend_yield
+
+        FROM stg_peer_groups pg
+
+        INNER JOIN stg_companies c
+
+            ON pg.company_id = c.company_id
+
+        INNER JOIN stg_financial_ratios fr
+
+            ON pg.company_id = fr.company_id
+
+        WHERE
+
+            pg.peer_group_name = ?
+
+        ORDER BY
+
+            c.company_name
+
+        """,
+
+        (group_name,)
+
+    )
