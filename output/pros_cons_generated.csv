@@ -1,0 +1,387 @@
+company_id,type,rule_id,text,confidence_pct,company_name
+ABB,pro,PRO_01,Consistently high return on equity above 20% demonstrates exceptional capital efficiency.,92,Abbott India Ltd
+ABB,pro,PRO_07,Very high interest coverage ratio reflects negligible financial stress from debt servicing.,100,Abbott India Ltd
+ABB,pro,PRO_11,Revenue growing slower than profits shows improving operating leverage and scale benefits.,86,Abbott India Ltd
+ADANIENSOL,pro,PRO_05,Operating profit margin above 25% indicates strong pricing power and cost discipline.,85,Adani Energy Solutions Ltd
+ADANIENSOL,con,CON_01,Debt-to-equity ratio of 2.93 is elevated for a non-financial company and warrants monitoring.,93,Adani Energy Solutions Ltd
+ADANIENSOL,con,CON_03,Operating margins declining for 3 consecutive years suggest pricing or cost pressure.,85,Adani Energy Solutions Ltd
+ADANIENSOL,con,CON_09,Earnings per share declining for 3 consecutive years reflects deteriorating profitability.,90,Adani Energy Solutions Ltd
+ADANIENT,pro,PRO_10,Return on equity improving for 3 consecutive years shows strengthening business quality.,85,Adani Enterprises Ltd
+ADANIENT,pro,PRO_11,Revenue growing slower than profits shows improving operating leverage and scale benefits.,100,Adani Enterprises Ltd
+ADANIGREEN,pro,PRO_05,Operating profit margin above 25% indicates strong pricing power and cost discipline.,100,Adani Green Energy Ltd
+ADANIGREEN,pro,PRO_11,Revenue growing slower than profits shows improving operating leverage and scale benefits.,100,Adani Green Energy Ltd
+ADANIGREEN,con,CON_01,Debt-to-equity ratio of 6.60 is elevated for a non-financial company and warrants monitoring.,100,Adani Green Energy Ltd
+ADANIPORTS,pro,PRO_05,Operating profit margin above 25% indicates strong pricing power and cost discipline.,100,"Adani Ports & Special Economic Zone Ltd
+"
+ADANIPORTS,pro,PRO_11,Revenue growing slower than profits shows improving operating leverage and scale benefits.,86,"Adani Ports & Special Economic Zone Ltd
+"
+ADANIPOWER,pro,PRO_01,Consistently high return on equity above 20% demonstrates exceptional capital efficiency.,97,Adani Power Ltd
+ADANIPOWER,pro,PRO_02,Strong free cash flow generation over 5 years signals healthy business fundamentals.,100,Adani Power Ltd
+ADANIPOWER,pro,PRO_05,Operating profit margin above 25% indicates strong pricing power and cost discipline.,91,Adani Power Ltd
+ADANIPOWER,pro,PRO_10,Return on equity improving for 3 consecutive years shows strengthening business quality.,85,Adani Power Ltd
+ADANIPOWER,pro,PRO_11,Revenue growing slower than profits shows improving operating leverage and scale benefits.,100,Adani Power Ltd
+ADANIPOWER,pro,PRO_12,Growing asset base funded by internal accruals reflects self-sustaining growth.,90,Adani Power Ltd
+AMBUJACEM,pro,PRO_07,Very high interest coverage ratio reflects negligible financial stress from debt servicing.,91,Ambuja Cements Ltd
+AMBUJACEM,con,CON_05,Revenue contraction over 2 consecutive years indicates demand weakness or market share loss.,85,Ambuja Cements Ltd
+APOLLOHOSP,pro,PRO_02,Strong free cash flow generation over 5 years signals healthy business fundamentals.,86,"Apollo Hospitals
+Chain of Indian private hospitals"
+APOLLOHOSP,pro,PRO_08,Consistent dividend yield above 2% backed by positive free cash flow.,90,"Apollo Hospitals
+Chain of Indian private hospitals"
+APOLLOHOSP,pro,PRO_11,Revenue growing slower than profits shows improving operating leverage and scale benefits.,100,"Apollo Hospitals
+Chain of Indian private hospitals"
+ASIANPAINT,pro,PRO_01,Consistently high return on equity above 20% demonstrates exceptional capital efficiency.,89,"Asian Paints
+Indian Multi-National Paint and Coating Manufacturing Company"
+ASIANPAINT,pro,PRO_02,Strong free cash flow generation over 5 years signals healthy business fundamentals.,90,"Asian Paints
+Indian Multi-National Paint and Coating Manufacturing Company"
+ASIANPAINT,pro,PRO_07,Very high interest coverage ratio reflects negligible financial stress from debt servicing.,93,"Asian Paints
+Indian Multi-National Paint and Coating Manufacturing Company"
+ASIANPAINT,pro,PRO_08,Consistent dividend yield above 2% backed by positive free cash flow.,87,"Asian Paints
+Indian Multi-National Paint and Coating Manufacturing Company"
+AXISBANK,pro,PRO_05,Operating profit margin above 25% indicates strong pricing power and cost discipline.,100,Axis Bank Ltd
+AXISBANK,pro,PRO_11,Revenue growing slower than profits shows improving operating leverage and scale benefits.,98,Axis Bank Ltd
+AXISBANK,con,CON_01,Debt-to-equity ratio of 8.25 is elevated for a non-financial company and warrants monitoring.,100,Axis Bank Ltd
+BAJAJ-AUTO,pro,PRO_01,Consistently high return on equity above 20% demonstrates exceptional capital efficiency.,85,Bajaj Auto Ltd
+BAJAJ-AUTO,pro,PRO_02,Strong free cash flow generation over 5 years signals healthy business fundamentals.,97,Bajaj Auto Ltd
+BAJAJ-AUTO,pro,PRO_07,Very high interest coverage ratio reflects negligible financial stress from debt servicing.,100,Bajaj Auto Ltd
+BAJAJ-AUTO,pro,PRO_08,Consistent dividend yield above 2% backed by positive free cash flow.,91,Bajaj Auto Ltd
+BAJAJFINSV,pro,PRO_01,Consistently high return on equity above 20% demonstrates exceptional capital efficiency.,84,Bajaj Finserv Ltd
+BAJAJFINSV,pro,PRO_05,Operating profit margin above 25% indicates strong pricing power and cost discipline.,92,Bajaj Finserv Ltd
+BAJAJFINSV,pro,PRO_11,Revenue growing slower than profits shows improving operating leverage and scale benefits.,82,Bajaj Finserv Ltd
+BAJAJFINSV,con,CON_01,Debt-to-equity ratio of 4.79 is elevated for a non-financial company and warrants monitoring.,100,Bajaj Finserv Ltd
+BAJAJFINSV,con,CON_02,Free cash flow negative for 3 consecutive years raises concern about cash generation quality.,90,Bajaj Finserv Ltd
+BAJAJFINSV,con,CON_08,Rising debt-to-equity ratio over 3 years suggests increasing financial leverage risk.,85,Bajaj Finserv Ltd
+BAJAJHLDNG,pro,PRO_05,Operating profit margin above 25% indicates strong pricing power and cost discipline.,100,Bajaj Holdings & Investment Ltd
+BAJAJHLDNG,pro,PRO_07,Very high interest coverage ratio reflects negligible financial stress from debt servicing.,100,Bajaj Holdings & Investment Ltd
+BAJAJHLDNG,pro,PRO_08,Consistent dividend yield above 2% backed by positive free cash flow.,90,Bajaj Holdings & Investment Ltd
+BAJAJHLDNG,pro,PRO_10,Return on equity improving for 3 consecutive years shows strengthening business quality.,85,Bajaj Holdings & Investment Ltd
+BAJAJHLDNG,pro,PRO_12,Growing asset base funded by internal accruals reflects self-sustaining growth.,90,Bajaj Holdings & Investment Ltd
+BAJFINANCE,pro,PRO_05,Operating profit margin above 25% indicates strong pricing power and cost discipline.,100,Bajaj Finance Ltd
+BAJFINANCE,pro,PRO_07,Very high interest coverage ratio reflects negligible financial stress from debt servicing.,100,Bajaj Finance Ltd
+BAJFINANCE,pro,PRO_11,Revenue growing slower than profits shows improving operating leverage and scale benefits.,90,Bajaj Finance Ltd
+BAJFINANCE,con,CON_01,Debt-to-equity ratio of 3.82 is elevated for a non-financial company and warrants monitoring.,100,Bajaj Finance Ltd
+BAJFINANCE,con,CON_02,Free cash flow negative for 3 consecutive years raises concern about cash generation quality.,90,Bajaj Finance Ltd
+BANKBARODA,pro,PRO_05,Operating profit margin above 25% indicates strong pricing power and cost discipline.,100,Bank of Baroda
+BANKBARODA,pro,PRO_10,Return on equity improving for 3 consecutive years shows strengthening business quality.,85,Bank of Baroda
+BANKBARODA,pro,PRO_11,Revenue growing slower than profits shows improving operating leverage and scale benefits.,100,Bank of Baroda
+BANKBARODA,con,CON_01,Debt-to-equity ratio of 12.14 is elevated for a non-financial company and warrants monitoring.,100,Bank of Baroda
+BEL,pro,PRO_01,Consistently high return on equity above 20% demonstrates exceptional capital efficiency.,100,Bharat Electronics Ltd
+BEL,pro,PRO_07,Very high interest coverage ratio reflects negligible financial stress from debt servicing.,100,Bharat Electronics Ltd
+BEL,pro,PRO_10,Return on equity improving for 3 consecutive years shows strengthening business quality.,85,Bharat Electronics Ltd
+BEL,pro,PRO_11,Revenue growing slower than profits shows improving operating leverage and scale benefits.,88,Bharat Electronics Ltd
+BHARTIARTL,pro,PRO_05,Operating profit margin above 25% indicates strong pricing power and cost discipline.,100,Bharti Airtel Ltd
+BHARTIARTL,con,CON_01,Debt-to-equity ratio of 2.61 is elevated for a non-financial company and warrants monitoring.,91,Bharti Airtel Ltd
+BHEL,con,CON_08,Rising debt-to-equity ratio over 3 years suggests increasing financial leverage risk.,85,"Bharat Heavy Electricals Limited
+"
+BOSCHLTD,pro,PRO_02,Strong free cash flow generation over 5 years signals healthy business fundamentals.,87,Bosch Ltd
+BOSCHLTD,pro,PRO_07,Very high interest coverage ratio reflects negligible financial stress from debt servicing.,99,Bosch Ltd
+BOSCHLTD,pro,PRO_08,Consistent dividend yield above 2% backed by positive free cash flow.,93,Bosch Ltd
+BOSCHLTD,pro,PRO_10,Return on equity improving for 3 consecutive years shows strengthening business quality.,85,Bosch Ltd
+BOSCHLTD,pro,PRO_11,Revenue growing slower than profits shows improving operating leverage and scale benefits.,100,Bosch Ltd
+BOSCHLTD,pro,PRO_12,Growing asset base funded by internal accruals reflects self-sustaining growth.,90,Bosch Ltd
+BPCL,pro,PRO_07,Very high interest coverage ratio reflects negligible financial stress from debt servicing.,87,Bharat Petroleum Corporation Ltd
+BPCL,con,CON_05,Revenue contraction over 2 consecutive years indicates demand weakness or market share loss.,85,Bharat Petroleum Corporation Ltd
+BRITANNIA,pro,PRO_01,Consistently high return on equity above 20% demonstrates exceptional capital efficiency.,100,Britannia Industries Ltd
+BRITANNIA,pro,PRO_07,Very high interest coverage ratio reflects negligible financial stress from debt servicing.,89,Britannia Industries Ltd
+CANBK,pro,PRO_08,Consistent dividend yield above 2% backed by positive free cash flow.,91,Canara Bank
+CANBK,pro,PRO_10,Return on equity improving for 3 consecutive years shows strengthening business quality.,85,Canara Bank
+CANBK,pro,PRO_11,Revenue growing slower than profits shows improving operating leverage and scale benefits.,100,Canara Bank
+CANBK,con,CON_01,Debt-to-equity ratio of 14.87 is elevated for a non-financial company and warrants monitoring.,100,Canara Bank
+CHOLAFIN,pro,PRO_05,Operating profit margin above 25% indicates strong pricing power and cost discipline.,100,Cholamandalam Investment & Finance Company Ltd
+CHOLAFIN,pro,PRO_07,Very high interest coverage ratio reflects negligible financial stress from debt servicing.,89,Cholamandalam Investment & Finance Company Ltd
+CHOLAFIN,pro,PRO_11,Revenue growing slower than profits shows improving operating leverage and scale benefits.,82,Cholamandalam Investment & Finance Company Ltd
+CHOLAFIN,con,CON_01,Debt-to-equity ratio of 6.86 is elevated for a non-financial company and warrants monitoring.,100,Cholamandalam Investment & Finance Company Ltd
+CHOLAFIN,con,CON_02,Free cash flow negative for 3 consecutive years raises concern about cash generation quality.,90,Cholamandalam Investment & Finance Company Ltd
+CHOLAFIN,con,CON_08,Rising debt-to-equity ratio over 3 years suggests increasing financial leverage risk.,85,Cholamandalam Investment & Finance Company Ltd
+CIPLA,pro,PRO_02,Strong free cash flow generation over 5 years signals healthy business fundamentals.,88,"Cipla Ltd
+"
+CIPLA,pro,PRO_05,Operating profit margin above 25% indicates strong pricing power and cost discipline.,100,"Cipla Ltd
+"
+CIPLA,pro,PRO_07,Very high interest coverage ratio reflects negligible financial stress from debt servicing.,92,"Cipla Ltd
+"
+CIPLA,pro,PRO_11,Revenue growing slower than profits shows improving operating leverage and scale benefits.,89,"Cipla Ltd
+"
+CIPLA,pro,PRO_12,Growing asset base funded by internal accruals reflects self-sustaining growth.,90,"Cipla Ltd
+"
+COALINDIA,pro,PRO_01,Consistently high return on equity above 20% demonstrates exceptional capital efficiency.,100,Coal India Ltd
+COALINDIA,pro,PRO_02,Strong free cash flow generation over 5 years signals healthy business fundamentals.,100,Coal India Ltd
+COALINDIA,pro,PRO_05,Operating profit margin above 25% indicates strong pricing power and cost discipline.,100,Coal India Ltd
+COALINDIA,pro,PRO_07,Very high interest coverage ratio reflects negligible financial stress from debt servicing.,87,Coal India Ltd
+COALINDIA,pro,PRO_08,Consistent dividend yield above 2% backed by positive free cash flow.,93,Coal India Ltd
+COALINDIA,pro,PRO_11,Revenue growing slower than profits shows improving operating leverage and scale benefits.,93,Coal India Ltd
+DABUR,pro,PRO_02,Strong free cash flow generation over 5 years signals healthy business fundamentals.,87,Dabur India Ltd
+DABUR,pro,PRO_07,Very high interest coverage ratio reflects negligible financial stress from debt servicing.,90,Dabur India Ltd
+DABUR,pro,PRO_08,Consistent dividend yield above 2% backed by positive free cash flow.,90,Dabur India Ltd
+DABUR,con,CON_08,Rising debt-to-equity ratio over 3 years suggests increasing financial leverage risk.,85,Dabur India Ltd
+DIVISLAB,pro,PRO_05,Operating profit margin above 25% indicates strong pricing power and cost discipline.,83,Divis Laboratories Ltd
+DIVISLAB,pro,PRO_07,Very high interest coverage ratio reflects negligible financial stress from debt servicing.,100,Divis Laboratories Ltd
+DIVISLAB,con,CON_03,Operating margins declining for 3 consecutive years suggest pricing or cost pressure.,85,Divis Laboratories Ltd
+DLF,pro,PRO_02,Strong free cash flow generation over 5 years signals healthy business fundamentals.,91,DLF Ltd
+DLF,pro,PRO_05,Operating profit margin above 25% indicates strong pricing power and cost discipline.,88,DLF Ltd
+DLF,pro,PRO_08,Consistent dividend yield above 2% backed by positive free cash flow.,88,DLF Ltd
+DLF,pro,PRO_10,Return on equity improving for 3 consecutive years shows strengthening business quality.,85,DLF Ltd
+DLF,pro,PRO_11,Revenue growing slower than profits shows improving operating leverage and scale benefits.,100,DLF Ltd
+DMART,pro,PRO_07,Very high interest coverage ratio reflects negligible financial stress from debt servicing.,100,Avenue Supermarts Ltd
+DMART,pro,PRO_11,Revenue growing slower than profits shows improving operating leverage and scale benefits.,81,Avenue Supermarts Ltd
+DMART,pro,PRO_12,Growing asset base funded by internal accruals reflects self-sustaining growth.,90,Avenue Supermarts Ltd
+DRREDDY,pro,PRO_02,Strong free cash flow generation over 5 years signals healthy business fundamentals.,88,Dr Reddys Laboratories Ltd
+DRREDDY,pro,PRO_05,Operating profit margin above 25% indicates strong pricing power and cost discipline.,83,Dr Reddys Laboratories Ltd
+DRREDDY,pro,PRO_07,Very high interest coverage ratio reflects negligible financial stress from debt servicing.,95,Dr Reddys Laboratories Ltd
+DRREDDY,pro,PRO_10,Return on equity improving for 3 consecutive years shows strengthening business quality.,85,Dr Reddys Laboratories Ltd
+DRREDDY,pro,PRO_11,Revenue growing slower than profits shows improving operating leverage and scale benefits.,92,Dr Reddys Laboratories Ltd
+EICHERMOT,pro,PRO_02,Strong free cash flow generation over 5 years signals healthy business fundamentals.,86,Eicher Motors Ltd
+EICHERMOT,pro,PRO_05,Operating profit margin above 25% indicates strong pricing power and cost discipline.,81,Eicher Motors Ltd
+EICHERMOT,pro,PRO_07,Very high interest coverage ratio reflects negligible financial stress from debt servicing.,100,Eicher Motors Ltd
+EICHERMOT,pro,PRO_08,Consistent dividend yield above 2% backed by positive free cash flow.,93,Eicher Motors Ltd
+EICHERMOT,pro,PRO_10,Return on equity improving for 3 consecutive years shows strengthening business quality.,85,Eicher Motors Ltd
+EICHERMOT,pro,PRO_11,Revenue growing slower than profits shows improving operating leverage and scale benefits.,92,Eicher Motors Ltd
+EICHERMOT,con,CON_08,Rising debt-to-equity ratio over 3 years suggests increasing financial leverage risk.,85,Eicher Motors Ltd
+GAIL,pro,PRO_07,Very high interest coverage ratio reflects negligible financial stress from debt servicing.,90,GAIL (India) Ltd
+GAIL,con,CON_08,Rising debt-to-equity ratio over 3 years suggests increasing financial leverage risk.,85,GAIL (India) Ltd
+GODREJCP,con,CON_04,Company reported a net loss in the most recent financial year.,95,Godrej Consumer Products Ltd
+GRASIM,con,CON_08,Rising debt-to-equity ratio over 3 years suggests increasing financial leverage risk.,85,Grasim Industries Ltd
+GRASIM,con,CON_09,Earnings per share declining for 3 consecutive years reflects deteriorating profitability.,90,Grasim Industries Ltd
+HAL,pro,PRO_01,Consistently high return on equity above 20% demonstrates exceptional capital efficiency.,100,Hindustan Aeronautics Ltd
+HAL,pro,PRO_05,Operating profit margin above 25% indicates strong pricing power and cost discipline.,87,Hindustan Aeronautics Ltd
+HAL,pro,PRO_07,Very high interest coverage ratio reflects negligible financial stress from debt servicing.,100,Hindustan Aeronautics Ltd
+HAL,pro,PRO_08,Consistent dividend yield above 2% backed by positive free cash flow.,88,Hindustan Aeronautics Ltd
+HAL,pro,PRO_11,Revenue growing slower than profits shows improving operating leverage and scale benefits.,95,Hindustan Aeronautics Ltd
+HAL,con,CON_08,Rising debt-to-equity ratio over 3 years suggests increasing financial leverage risk.,85,Hindustan Aeronautics Ltd
+HAVELLS,pro,PRO_07,Very high interest coverage ratio reflects negligible financial stress from debt servicing.,90,Havells India Ltd
+HAVELLS,pro,PRO_08,Consistent dividend yield above 2% backed by positive free cash flow.,88,Havells India Ltd
+HCLTECH,pro,PRO_01,Consistently high return on equity above 20% demonstrates exceptional capital efficiency.,83,HCL Technologies Ltd
+HCLTECH,pro,PRO_02,Strong free cash flow generation over 5 years signals healthy business fundamentals.,100,HCL Technologies Ltd
+HCLTECH,pro,PRO_07,Very high interest coverage ratio reflects negligible financial stress from debt servicing.,94,HCL Technologies Ltd
+HCLTECH,pro,PRO_10,Return on equity improving for 3 consecutive years shows strengthening business quality.,85,HCL Technologies Ltd
+HDFCBANK,pro,PRO_08,Consistent dividend yield above 2% backed by positive free cash flow.,93,HDFC Bank Ltd
+HDFCBANK,con,CON_01,Debt-to-equity ratio of 6.81 is elevated for a non-financial company and warrants monitoring.,100,HDFC Bank Ltd
+HDFCBANK,con,CON_06,Interest coverage ratio below 1.5x indicates the company is at risk of not meeting its debt obligations.,72,HDFC Bank Ltd
+HDFCLIFE,pro,PRO_05,Operating profit margin above 25% indicates strong pricing power and cost discipline.,100,HDFC Life Insurance Company Ltd
+HDFCLIFE,pro,PRO_07,Very high interest coverage ratio reflects negligible financial stress from debt servicing.,100,HDFC Life Insurance Company Ltd
+HDFCLIFE,pro,PRO_10,Return on equity improving for 3 consecutive years shows strengthening business quality.,85,HDFC Life Insurance Company Ltd
+HEROMOTOCO,pro,PRO_02,Strong free cash flow generation over 5 years signals healthy business fundamentals.,90,"Hero MotoCorp Ltd
+"
+HEROMOTOCO,pro,PRO_05,Operating profit margin above 25% indicates strong pricing power and cost discipline.,100,"Hero MotoCorp Ltd
+"
+HEROMOTOCO,pro,PRO_07,Very high interest coverage ratio reflects negligible financial stress from debt servicing.,94,"Hero MotoCorp Ltd
+"
+HEROMOTOCO,pro,PRO_10,Return on equity improving for 3 consecutive years shows strengthening business quality.,85,"Hero MotoCorp Ltd
+"
+HEROMOTOCO,pro,PRO_11,Revenue growing slower than profits shows improving operating leverage and scale benefits.,82,"Hero MotoCorp Ltd
+"
+HINDALCO,pro,PRO_05,Operating profit margin above 25% indicates strong pricing power and cost discipline.,100,Hindalco Industries Ltd
+HINDALCO,pro,PRO_07,Very high interest coverage ratio reflects negligible financial stress from debt servicing.,100,Hindalco Industries Ltd
+HINDALCO,pro,PRO_11,Revenue growing slower than profits shows improving operating leverage and scale benefits.,98,Hindalco Industries Ltd
+HINDALCO,pro,PRO_12,Growing asset base funded by internal accruals reflects self-sustaining growth.,90,Hindalco Industries Ltd
+HINDUNILVR,pro,PRO_02,Strong free cash flow generation over 5 years signals healthy business fundamentals.,100,"Hindustan Unilever Ltd
+"
+HINDUNILVR,pro,PRO_05,Operating profit margin above 25% indicates strong pricing power and cost discipline.,100,"Hindustan Unilever Ltd
+"
+HINDUNILVR,pro,PRO_07,Very high interest coverage ratio reflects negligible financial stress from debt servicing.,97,"Hindustan Unilever Ltd
+"
+HINDUNILVR,pro,PRO_08,Consistent dividend yield above 2% backed by positive free cash flow.,93,"Hindustan Unilever Ltd
+"
+HINDUNILVR,pro,PRO_11,Revenue growing slower than profits shows improving operating leverage and scale benefits.,80,"Hindustan Unilever Ltd
+"
+HINDUNILVR,con,CON_08,Rising debt-to-equity ratio over 3 years suggests increasing financial leverage risk.,85,"Hindustan Unilever Ltd
+"
+ICICIBANK,pro,PRO_08,Consistent dividend yield above 2% backed by positive free cash flow.,90,ICICI Bank Ltd
+ICICIBANK,pro,PRO_10,Return on equity improving for 3 consecutive years shows strengthening business quality.,85,ICICI Bank Ltd
+ICICIBANK,pro,PRO_11,Revenue growing slower than profits shows improving operating leverage and scale benefits.,86,ICICI Bank Ltd
+ICICIBANK,con,CON_01,Debt-to-equity ratio of 6.45 is elevated for a non-financial company and warrants monitoring.,100,ICICI Bank Ltd
+ICICIBANK,con,CON_06,Interest coverage ratio below 1.5x indicates the company is at risk of not meeting its debt obligations.,74,ICICI Bank Ltd
+ICICIGI,pro,PRO_02,Strong free cash flow generation over 5 years signals healthy business fundamentals.,86,ICICI Lombard General Insurance Company Ltd
+ICICIGI,pro,PRO_05,Operating profit margin above 25% indicates strong pricing power and cost discipline.,100,ICICI Lombard General Insurance Company Ltd
+ICICIGI,pro,PRO_07,Very high interest coverage ratio reflects negligible financial stress from debt servicing.,100,ICICI Lombard General Insurance Company Ltd
+ICICIGI,pro,PRO_08,Consistent dividend yield above 2% backed by positive free cash flow.,90,ICICI Lombard General Insurance Company Ltd
+ICICIPRULI,pro,PRO_07,Very high interest coverage ratio reflects negligible financial stress from debt servicing.,91,ICICI Prudential Life Insurance Company Ltd
+ICICIPRULI,pro,PRO_11,Revenue growing slower than profits shows improving operating leverage and scale benefits.,82,ICICI Prudential Life Insurance Company Ltd
+INDIGO,pro,PRO_02,Strong free cash flow generation over 5 years signals healthy business fundamentals.,95,Interglobe Aviation Ltd
+INDIGO,pro,PRO_05,Operating profit margin above 25% indicates strong pricing power and cost discipline.,100,Interglobe Aviation Ltd
+INDIGO,pro,PRO_07,Very high interest coverage ratio reflects negligible financial stress from debt servicing.,90,Interglobe Aviation Ltd
+INDIGO,pro,PRO_08,Consistent dividend yield above 2% backed by positive free cash flow.,93,Interglobe Aviation Ltd
+INDIGO,pro,PRO_10,Return on equity improving for 3 consecutive years shows strengthening business quality.,85,Interglobe Aviation Ltd
+INDUSINDBK,pro,PRO_05,Operating profit margin above 25% indicates strong pricing power and cost discipline.,100,IndusInd Bank Ltd
+INDUSINDBK,pro,PRO_10,Return on equity improving for 3 consecutive years shows strengthening business quality.,85,IndusInd Bank Ltd
+INDUSINDBK,pro,PRO_11,Revenue growing slower than profits shows improving operating leverage and scale benefits.,92,IndusInd Bank Ltd
+INDUSINDBK,con,CON_01,Debt-to-equity ratio of 6.89 is elevated for a non-financial company and warrants monitoring.,100,IndusInd Bank Ltd
+INFY,pro,PRO_01,Consistently high return on equity above 20% demonstrates exceptional capital efficiency.,90,Infosys Ltd
+INFY,pro,PRO_02,Strong free cash flow generation over 5 years signals healthy business fundamentals.,100,Infosys Ltd
+INFY,pro,PRO_07,Very high interest coverage ratio reflects negligible financial stress from debt servicing.,100,Infosys Ltd
+INFY,pro,PRO_08,Consistent dividend yield above 2% backed by positive free cash flow.,92,Infosys Ltd
+IOC,pro,PRO_07,Very high interest coverage ratio reflects negligible financial stress from debt servicing.,87,"Indian Oil Corporation
+"
+IOC,con,CON_05,Revenue contraction over 2 consecutive years indicates demand weakness or market share loss.,85,"Indian Oil Corporation
+"
+IRCTC,pro,PRO_01,Consistently high return on equity above 20% demonstrates exceptional capital efficiency.,97,Indian Railway Catering & Tourism Corporation Ltd
+IRCTC,pro,PRO_05,Operating profit margin above 25% indicates strong pricing power and cost discipline.,89,Indian Railway Catering & Tourism Corporation Ltd
+IRCTC,pro,PRO_07,Very high interest coverage ratio reflects negligible financial stress from debt servicing.,100,Indian Railway Catering & Tourism Corporation Ltd
+IRCTC,pro,PRO_11,Revenue growing slower than profits shows improving operating leverage and scale benefits.,83,Indian Railway Catering & Tourism Corporation Ltd
+IRCTC,pro,PRO_12,Growing asset base funded by internal accruals reflects self-sustaining growth.,90,Indian Railway Catering & Tourism Corporation Ltd
+IRCTC,con,CON_03,Operating margins declining for 3 consecutive years suggest pricing or cost pressure.,85,Indian Railway Catering & Tourism Corporation Ltd
+IRFC,pro,PRO_05,Operating profit margin above 25% indicates strong pricing power and cost discipline.,100,Indian Railway Finance Corporation Ltd
+IRFC,pro,PRO_08,Consistent dividend yield above 2% backed by positive free cash flow.,88,Indian Railway Finance Corporation Ltd
+IRFC,con,CON_01,Debt-to-equity ratio of 8.38 is elevated for a non-financial company and warrants monitoring.,100,Indian Railway Finance Corporation Ltd
+IRFC,con,CON_06,Interest coverage ratio below 1.5x indicates the company is at risk of not meeting its debt obligations.,74,Indian Railway Finance Corporation Ltd
+ITC,pro,PRO_01,Consistently high return on equity above 20% demonstrates exceptional capital efficiency.,87,"ITC Ltd
+"
+ITC,pro,PRO_02,Strong free cash flow generation over 5 years signals healthy business fundamentals.,100,"ITC Ltd
+"
+ITC,pro,PRO_05,Operating profit margin above 25% indicates strong pricing power and cost discipline.,92,"ITC Ltd
+"
+ITC,pro,PRO_07,Very high interest coverage ratio reflects negligible financial stress from debt servicing.,100,"ITC Ltd
+"
+ITC,pro,PRO_08,Consistent dividend yield above 2% backed by positive free cash flow.,93,"ITC Ltd
+"
+ITC,pro,PRO_11,Revenue growing slower than profits shows improving operating leverage and scale benefits.,80,"ITC Ltd
+"
+JINDALSTEL,con,CON_05,Revenue contraction over 2 consecutive years indicates demand weakness or market share loss.,85,Jindal Steel & Power Ltd
+JIOFIN,pro,PRO_03,Debt-free balance sheet provides financial flexibility and eliminates interest burden.,95,Jio Financial Services Ltd
+JIOFIN,pro,PRO_05,Operating profit margin above 25% indicates strong pricing power and cost discipline.,100,Jio Financial Services Ltd
+JIOFIN,pro,PRO_07,Very high interest coverage ratio reflects negligible financial stress from debt servicing.,100,Jio Financial Services Ltd
+JIOFIN,pro,PRO_08,Consistent dividend yield above 2% backed by positive free cash flow.,89,Jio Financial Services Ltd
+JSWENERGY,pro,PRO_05,Operating profit margin above 25% indicates strong pricing power and cost discipline.,100,JSW Energy Ltd
+JSWENERGY,pro,PRO_11,Revenue growing slower than profits shows improving operating leverage and scale benefits.,89,JSW Energy Ltd
+JSWENERGY,con,CON_08,Rising debt-to-equity ratio over 3 years suggests increasing financial leverage risk.,85,JSW Energy Ltd
+KOTAKBANK,pro,PRO_10,Return on equity improving for 3 consecutive years shows strengthening business quality.,85,"Kotak Mahindra Bank Ltd
+"
+KOTAKBANK,pro,PRO_11,Revenue growing slower than profits shows improving operating leverage and scale benefits.,83,"Kotak Mahindra Bank Ltd
+"
+KOTAKBANK,con,CON_01,Debt-to-equity ratio of 4.00 is elevated for a non-financial company and warrants monitoring.,100,"Kotak Mahindra Bank Ltd
+"
+KOTAKBANK,con,CON_06,Interest coverage ratio below 1.5x indicates the company is at risk of not meeting its debt obligations.,75,"Kotak Mahindra Bank Ltd
+"
+LICI,pro,PRO_01,Consistently high return on equity above 20% demonstrates exceptional capital efficiency.,100,Life Insurance Corporation of India
+LICI,pro,PRO_02,Strong free cash flow generation over 5 years signals healthy business fundamentals.,100,Life Insurance Corporation of India
+LICI,pro,PRO_03,Debt-free balance sheet provides financial flexibility and eliminates interest burden.,95,Life Insurance Corporation of India
+LICI,pro,PRO_07,Very high interest coverage ratio reflects negligible financial stress from debt servicing.,100,Life Insurance Corporation of India
+LICI,pro,PRO_08,Consistent dividend yield above 2% backed by positive free cash flow.,91,Life Insurance Corporation of India
+LICI,pro,PRO_11,Revenue growing slower than profits shows improving operating leverage and scale benefits.,100,Life Insurance Corporation of India
+LODHA,pro,PRO_05,Operating profit margin above 25% indicates strong pricing power and cost discipline.,81,Macrotech Developers Ltd
+LODHA,pro,PRO_11,Revenue growing slower than profits shows improving operating leverage and scale benefits.,100,Macrotech Developers Ltd
+LODHA,pro,PRO_12,Growing asset base funded by internal accruals reflects self-sustaining growth.,90,Macrotech Developers Ltd
+LT,pro,PRO_01,Consistently high return on equity above 20% demonstrates exceptional capital efficiency.,100,Larsen & Toubro Ltd
+LT,pro,PRO_10,Return on equity improving for 3 consecutive years shows strengthening business quality.,85,Larsen & Toubro Ltd
+LT,con,CON_03,Operating margins declining for 3 consecutive years suggest pricing or cost pressure.,85,Larsen & Toubro Ltd
+LT,con,CON_08,Rising debt-to-equity ratio over 3 years suggests increasing financial leverage risk.,85,Larsen & Toubro Ltd
+LTIM,pro,PRO_01,Consistently high return on equity above 20% demonstrates exceptional capital efficiency.,86,LTIMindtree Ltd
+LTIM,pro,PRO_02,Strong free cash flow generation over 5 years signals healthy business fundamentals.,88,LTIMindtree Ltd
+LTIM,pro,PRO_07,Very high interest coverage ratio reflects negligible financial stress from debt servicing.,91,LTIMindtree Ltd
+LTIM,pro,PRO_08,Consistent dividend yield above 2% backed by positive free cash flow.,93,LTIMindtree Ltd
+LTIM,con,CON_08,Rising debt-to-equity ratio over 3 years suggests increasing financial leverage risk.,85,LTIMindtree Ltd
+M&M,pro,PRO_11,Revenue growing slower than profits shows improving operating leverage and scale benefits.,100,"Mahindra & Mahindra Ltd
+"
+MARUTI,pro,PRO_02,Strong free cash flow generation over 5 years signals healthy business fundamentals.,90,Maruti Suzuki India Ltd
+MARUTI,pro,PRO_07,Very high interest coverage ratio reflects negligible financial stress from debt servicing.,100,Maruti Suzuki India Ltd
+MARUTI,pro,PRO_10,Return on equity improving for 3 consecutive years shows strengthening business quality.,85,Maruti Suzuki India Ltd
+MARUTI,pro,PRO_11,Revenue growing slower than profits shows improving operating leverage and scale benefits.,91,Maruti Suzuki India Ltd
+MOTHERSON,pro,PRO_02,Strong free cash flow generation over 5 years signals healthy business fundamentals.,89,Samvardhana Motherson International Ltd
+MOTHERSON,pro,PRO_08,Consistent dividend yield above 2% backed by positive free cash flow.,87,Samvardhana Motherson International Ltd
+MOTHERSON,pro,PRO_10,Return on equity improving for 3 consecutive years shows strengthening business quality.,85,Samvardhana Motherson International Ltd
+MOTHERSON,pro,PRO_11,Revenue growing slower than profits shows improving operating leverage and scale benefits.,88,Samvardhana Motherson International Ltd
+NAUKRI,pro,PRO_05,Operating profit margin above 25% indicates strong pricing power and cost discipline.,83,Info Edge (India) Ltd
+NAUKRI,pro,PRO_07,Very high interest coverage ratio reflects negligible financial stress from debt servicing.,91,Info Edge (India) Ltd
+NESTLEIND,pro,PRO_01,Consistently high return on equity above 20% demonstrates exceptional capital efficiency.,100,Nestle India Ltd
+NESTLEIND,pro,PRO_02,Strong free cash flow generation over 5 years signals healthy business fundamentals.,89,Nestle India Ltd
+NESTLEIND,pro,PRO_07,Very high interest coverage ratio reflects negligible financial stress from debt servicing.,93,Nestle India Ltd
+NESTLEIND,pro,PRO_08,Consistent dividend yield above 2% backed by positive free cash flow.,92,Nestle India Ltd
+NESTLEIND,pro,PRO_11,Revenue growing slower than profits shows improving operating leverage and scale benefits.,83,Nestle India Ltd
+NHPC,pro,PRO_02,Strong free cash flow generation over 5 years signals healthy business fundamentals.,88,"NHPC Ltd
+"
+NHPC,pro,PRO_05,Operating profit margin above 25% indicates strong pricing power and cost discipline.,100,"NHPC Ltd
+"
+NHPC,pro,PRO_07,Very high interest coverage ratio reflects negligible financial stress from debt servicing.,87,"NHPC Ltd
+"
+NHPC,con,CON_08,Rising debt-to-equity ratio over 3 years suggests increasing financial leverage risk.,85,"NHPC Ltd
+"
+NTPC,pro,PRO_05,Operating profit margin above 25% indicates strong pricing power and cost discipline.,84,NTPC Ltd
+ONGC,pro,PRO_02,Strong free cash flow generation over 5 years signals healthy business fundamentals.,100,Oil & Natural Gas Corpn Ltd
+ONGC,pro,PRO_07,Very high interest coverage ratio reflects negligible financial stress from debt servicing.,87,Oil & Natural Gas Corpn Ltd
+PFC,pro,PRO_01,Consistently high return on equity above 20% demonstrates exceptional capital efficiency.,86,Power Finance Corporation Ltd
+PFC,pro,PRO_05,Operating profit margin above 25% indicates strong pricing power and cost discipline.,92,Power Finance Corporation Ltd
+PFC,pro,PRO_11,Revenue growing slower than profits shows improving operating leverage and scale benefits.,86,Power Finance Corporation Ltd
+PFC,con,CON_01,Debt-to-equity ratio of 8.52 is elevated for a non-financial company and warrants monitoring.,100,Power Finance Corporation Ltd
+PFC,con,CON_06,Interest coverage ratio below 1.5x indicates the company is at risk of not meeting its debt obligations.,88,Power Finance Corporation Ltd
+PIDILITIND,pro,PRO_07,Very high interest coverage ratio reflects negligible financial stress from debt servicing.,96,Pidilite Industries Ltd
+PIDILITIND,pro,PRO_12,Growing asset base funded by internal accruals reflects self-sustaining growth.,90,Pidilite Industries Ltd
+PNB,pro,PRO_01,Consistently high return on equity above 20% demonstrates exceptional capital efficiency.,100,Punjab National Bank
+PNB,pro,PRO_11,Revenue growing slower than profits shows improving operating leverage and scale benefits.,100,Punjab National Bank
+PNB,con,CON_01,Debt-to-equity ratio of 3.68 is elevated for a non-financial company and warrants monitoring.,99,Punjab National Bank
+PNB,con,CON_02,Free cash flow negative for 3 consecutive years raises concern about cash generation quality.,90,Punjab National Bank
+POWERGRID,pro,PRO_02,Strong free cash flow generation over 5 years signals healthy business fundamentals.,100,Power Grid Corporation of India Ltd
+POWERGRID,pro,PRO_05,Operating profit margin above 25% indicates strong pricing power and cost discipline.,100,Power Grid Corporation of India Ltd
+POWERGRID,pro,PRO_08,Consistent dividend yield above 2% backed by positive free cash flow.,89,Power Grid Corporation of India Ltd
+POWERGRID,pro,PRO_11,Revenue growing slower than profits shows improving operating leverage and scale benefits.,83,Power Grid Corporation of India Ltd
+RECLTD,pro,PRO_05,Operating profit margin above 25% indicates strong pricing power and cost discipline.,100,REC Ltd
+RECLTD,pro,PRO_11,Revenue growing slower than profits shows improving operating leverage and scale benefits.,84,REC Ltd
+RECLTD,con,CON_01,Debt-to-equity ratio of 6.42 is elevated for a non-financial company and warrants monitoring.,100,REC Ltd
+RECLTD,con,CON_02,Free cash flow negative for 3 consecutive years raises concern about cash generation quality.,90,REC Ltd
+RELIANCE,pro,PRO_08,Consistent dividend yield above 2% backed by positive free cash flow.,93,"Reliance Industries Ltd
+"
+SBILIFE,pro,PRO_03,Debt-free balance sheet provides financial flexibility and eliminates interest burden.,95,SBI Life Insurance Company Ltd
+SBILIFE,pro,PRO_07,Very high interest coverage ratio reflects negligible financial stress from debt servicing.,100,SBI Life Insurance Company Ltd
+SBILIFE,pro,PRO_11,Revenue growing slower than profits shows improving operating leverage and scale benefits.,81,SBI Life Insurance Company Ltd
+SHREECEM,pro,PRO_07,Very high interest coverage ratio reflects negligible financial stress from debt servicing.,89,Shree Cement Ltd
+SHREECEM,pro,PRO_08,Consistent dividend yield above 2% backed by positive free cash flow.,90,Shree Cement Ltd
+SHRIRAMFIN,pro,PRO_05,Operating profit margin above 25% indicates strong pricing power and cost discipline.,84,"Shriram Finance Ltd
+"
+SHRIRAMFIN,pro,PRO_10,Return on equity improving for 3 consecutive years shows strengthening business quality.,85,"Shriram Finance Ltd
+"
+SHRIRAMFIN,pro,PRO_11,Revenue growing slower than profits shows improving operating leverage and scale benefits.,92,"Shriram Finance Ltd
+"
+SHRIRAMFIN,con,CON_01,Debt-to-equity ratio of 3.99 is elevated for a non-financial company and warrants monitoring.,100,"Shriram Finance Ltd
+"
+SHRIRAMFIN,con,CON_02,Free cash flow negative for 3 consecutive years raises concern about cash generation quality.,90,"Shriram Finance Ltd
+"
+SHRIRAMFIN,con,CON_06,Interest coverage ratio below 1.5x indicates the company is at risk of not meeting its debt obligations.,86,"Shriram Finance Ltd
+"
+SIEMENS,pro,PRO_07,Very high interest coverage ratio reflects negligible financial stress from debt servicing.,98,Siemens Ltd
+SIEMENS,pro,PRO_08,Consistent dividend yield above 2% backed by positive free cash flow.,91,Siemens Ltd
+SIEMENS,pro,PRO_10,Return on equity improving for 3 consecutive years shows strengthening business quality.,85,Siemens Ltd
+SIEMENS,pro,PRO_11,Revenue growing slower than profits shows improving operating leverage and scale benefits.,91,Siemens Ltd
+SUNPHARMA,pro,PRO_05,Operating profit margin above 25% indicates strong pricing power and cost discipline.,83,Sun Pharmaceuticals Industries Ltd
+SUNPHARMA,pro,PRO_07,Very high interest coverage ratio reflects negligible financial stress from debt servicing.,97,Sun Pharmaceuticals Industries Ltd
+SUNPHARMA,pro,PRO_08,Consistent dividend yield above 2% backed by positive free cash flow.,92,Sun Pharmaceuticals Industries Ltd
+SUNPHARMA,pro,PRO_11,Revenue growing slower than profits shows improving operating leverage and scale benefits.,100,Sun Pharmaceuticals Industries Ltd
+TATACONSUM,pro,PRO_02,Strong free cash flow generation over 5 years signals healthy business fundamentals.,86,Tata Consumer Products Ltd
+TATACONSUM,pro,PRO_07,Very high interest coverage ratio reflects negligible financial stress from debt servicing.,90,Tata Consumer Products Ltd
+TATACONSUM,con,CON_08,Rising debt-to-equity ratio over 3 years suggests increasing financial leverage risk.,85,Tata Consumer Products Ltd
+TATAMOTORS,pro,PRO_08,Consistent dividend yield above 2% backed by positive free cash flow.,91,Tata Motors Ltd
+TATAMOTORS,pro,PRO_10,Return on equity improving for 3 consecutive years shows strengthening business quality.,85,Tata Motors Ltd
+TATAMOTORS,pro,PRO_12,Growing asset base funded by internal accruals reflects self-sustaining growth.,90,Tata Motors Ltd
+TATAPOWER,pro,PRO_11,Revenue growing slower than profits shows improving operating leverage and scale benefits.,91,"Tata Power Company Ltd
+"
+TATASTEEL,pro,PRO_02,Strong free cash flow generation over 5 years signals healthy business fundamentals.,100,"Tata Steel Ltd
+"
+TATASTEEL,con,CON_03,Operating margins declining for 3 consecutive years suggest pricing or cost pressure.,85,"Tata Steel Ltd
+"
+TATASTEEL,con,CON_05,Revenue contraction over 2 consecutive years indicates demand weakness or market share loss.,85,"Tata Steel Ltd
+"
+TATASTEEL,con,CON_08,Rising debt-to-equity ratio over 3 years suggests increasing financial leverage risk.,85,"Tata Steel Ltd
+"
+TCS,pro,PRO_01,Consistently high return on equity above 20% demonstrates exceptional capital efficiency.,100,Tata Consultancy Services Ltd
+TCS,pro,PRO_02,Strong free cash flow generation over 5 years signals healthy business fundamentals.,100,Tata Consultancy Services Ltd
+TCS,pro,PRO_05,Operating profit margin above 25% indicates strong pricing power and cost discipline.,82,Tata Consultancy Services Ltd
+TCS,pro,PRO_07,Very high interest coverage ratio reflects negligible financial stress from debt servicing.,100,Tata Consultancy Services Ltd
+TCS,pro,PRO_10,Return on equity improving for 3 consecutive years shows strengthening business quality.,85,Tata Consultancy Services Ltd
+TECHM,pro,PRO_02,Strong free cash flow generation over 5 years signals healthy business fundamentals.,96,Tech Mahindra Ltd
+TECHM,pro,PRO_07,Very high interest coverage ratio reflects negligible financial stress from debt servicing.,88,Tech Mahindra Ltd
+TITAN,pro,PRO_01,Consistently high return on equity above 20% demonstrates exceptional capital efficiency.,89,"Titan Company Ltd
+"
+TITAN,pro,PRO_08,Consistent dividend yield above 2% backed by positive free cash flow.,89,"Titan Company Ltd
+"
+TITAN,pro,PRO_10,Return on equity improving for 3 consecutive years shows strengthening business quality.,85,"Titan Company Ltd
+"
+TITAN,pro,PRO_11,Revenue growing slower than profits shows improving operating leverage and scale benefits.,87,"Titan Company Ltd
+"
+TITAN,con,CON_08,Rising debt-to-equity ratio over 3 years suggests increasing financial leverage risk.,85,"Titan Company Ltd
+"
+TORNTPHARM,pro,PRO_02,Strong free cash flow generation over 5 years signals healthy business fundamentals.,88,Torrent Pharmaceuticals Ltd
+TORNTPHARM,pro,PRO_05,Operating profit margin above 25% indicates strong pricing power and cost discipline.,86,Torrent Pharmaceuticals Ltd
+TORNTPHARM,pro,PRO_10,Return on equity improving for 3 consecutive years shows strengthening business quality.,85,Torrent Pharmaceuticals Ltd
+TORNTPHARM,pro,PRO_11,Revenue growing slower than profits shows improving operating leverage and scale benefits.,81,Torrent Pharmaceuticals Ltd
+TRENT,pro,PRO_08,Consistent dividend yield above 2% backed by positive free cash flow.,90,Trent Ltd
+TRENT,pro,PRO_10,Return on equity improving for 3 consecutive years shows strengthening business quality.,85,Trent Ltd
+TVSMOTOR,pro,PRO_10,Return on equity improving for 3 consecutive years shows strengthening business quality.,85,TVS Motor Company Ltd
+TVSMOTOR,pro,PRO_11,Revenue growing slower than profits shows improving operating leverage and scale benefits.,91,TVS Motor Company Ltd
+TVSMOTOR,con,CON_01,Debt-to-equity ratio of 3.83 is elevated for a non-financial company and warrants monitoring.,100,TVS Motor Company Ltd
+TVSMOTOR,con,CON_02,Free cash flow negative for 3 consecutive years raises concern about cash generation quality.,90,TVS Motor Company Ltd

@@ -1,10 +1,30 @@
 from pathlib import Path
+import pandas as pd
 from src.etl.loader import ExcelLoader
 from src.etl.normalizer import DataNormalizer
 from src.etl.db_loader import DatabaseLoader
 from src.validation.schema_validator import SchemaValidator
+from src.reports.batch_tearsheets import BatchTearSheetGenerator
+import logging
+from scripts.run_ratio_engine import main as run_ratio_engine
+from scripts.run_cashflow_kpis import main as run_cashflow_intelligence
+from scripts.run_capital_allocation import main as run_capital_allocation
 
 
+LOG_DIR = Path("logs")
+LOG_DIR.mkdir(exist_ok=True)
+
+logging.basicConfig(
+    filename=LOG_DIR / "pipeline.log",
+    level=logging.INFO,
+    format="%(asctime)s | %(levelname)s | %(message)s"
+)
+
+logger = logging.getLogger(__name__)
+
+REPORT_OUTPUT_DIR = Path(
+    "reports/tearsheets"
+)
 def run_pipeline():
 
     core_loader = ExcelLoader("data/raw")
@@ -42,6 +62,26 @@ def run_pipeline():
         "stock_prices": "stock_prices.xlsx"
     }
     support_datasets = {}
+
+    profitloss_df = DataNormalizer.clean_column_names(
+    datasets["profitandloss"].copy()
+    )
+
+    balancesheet_df = DataNormalizer.clean_column_names(
+        datasets["balancesheet"].copy()
+    )
+
+    cashflow_df = DataNormalizer.clean_column_names(
+        datasets["cashflow"].copy()
+    )
+
+    proscons_df = DataNormalizer.clean_column_names(
+        datasets["prosandcons"].copy()
+    )
+
+    cashflow_intelligence_df = pd.read_excel(
+    "output/cashflow_intelligence.xlsx"
+)
     
     for name, file in SUPPORT_FILES.items():
 
@@ -126,7 +166,6 @@ def run_pipeline():
         "output/validation_failures.csv"
           )
     
-    import pandas as pd
 
     pd.DataFrame(
         audit_rows
@@ -134,23 +173,65 @@ def run_pipeline():
         "output/load_audit.csv",
         index=False
 )
-    
-from src.analytics.valuation import ValuationAnalytics
+    logger.info("\nRunning Ratio Engine...")
+    try:
+        run_ratio_engine()
+    except Exception as e:
+        logger.exception("Ratio Engine failed")
+        raise
 
-valuation_engine = ValuationAnalytics(output_dir="output")
+    logger.info("\nRunning Cash Flow Intelligence...")
+    try:
+        run_cashflow_intelligence()
+    except Exception as e:
+        logger.exception("Cash Flow Intelligence failed")
+        raise
 
-valuation_engine.compute(
-    companies_df=companies_df,
-    ratios_df=financial_ratios_df,
-    market_cap_df=market_cap_df,
-    cashflow_df=cashflow_df
+    logger.info("\nRunning Capital Allocation Summary...")
+    try: 
+        run_capital_allocation()
+    except Exception as e:
+        logger.exception("Capital Allocation Summary failed")
+        raise
+
+    generator = BatchTearSheetGenerator(
+        companies_df=companies_df,
+        profitloss_df=profitloss_df,
+        balancesheet_df=balancesheet_df,
+        cashflow_df=cashflow_df,
+        proscons_df=proscons_df,
+        intelligence_df=cashflow_intelligence_df,
+        output_dir=REPORT_OUTPUT_DIR,
+    )
+
+    GENERATE_TEARSHEETS = True
+
+    if GENERATE_TEARSHEETS:
+
+        logger.info(
+            "=" * 60
+        )
+
+        logger.info(
+            "Generating Company Tear Sheets..."
+        )
+
+        report = generator.generate_all()
+
+        logger.info(
+            "%d reports generated.",
+            len(report),
+        )
+
+        logger.info(
+            "=" * 60
+        )
+logger.info("Pipeline Completed Successfully")
+
+logger.info(
+    "Reports saved to : %s",
+    REPORT_OUTPUT_DIR,
 )
-    
-print("Load audit saved to output/load_audit.csv")
-    
-
-print("Pipeline completed successfully.")
-
 
 
 if __name__ == "__main__":

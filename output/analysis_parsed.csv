@@ -1,0 +1,190 @@
+company_id,metric_type,period_years,value_pct
+"company_id           1
+company_id    HDFCBANK
+Name: 0, dtype: object",compounded_sales_growth,10,21.0
+"company_id           1
+company_id    HDFCBANK
+Name: 0, dtype: object",compounded_profit_growth,10,22.0
+"company_id           1
+company_id    HDFCBANK
+Name: 0, dtype: object",stock_price_cagr,10,15.0
+"company_id           1
+company_id    HDFCBANK
+Name: 0, dtype: object",roe,10,17.0
+"company_id         10
+company_id    SBILIFE
+Name: 1, dtype: object",compounded_sales_growth,5,24.0
+"company_id         10
+company_id    SBILIFE
+Name: 1, dtype: object",compounded_profit_growth,5,6.0
+"company_id         10
+company_id    SBILIFE
+Name: 1, dtype: object",stock_price_cagr,5,8.0
+"company_id         10
+company_id    SBILIFE
+Name: 1, dtype: object",roe,5,14.0
+"company_id         11
+company_id    SBILIFE
+Name: 2, dtype: object",compounded_sales_growth,3,17.0
+"company_id         11
+company_id    SBILIFE
+Name: 2, dtype: object",compounded_profit_growth,3,9.0
+"company_id         11
+company_id    SBILIFE
+Name: 2, dtype: object",stock_price_cagr,3,7.0
+"company_id         11
+company_id    SBILIFE
+Name: 2, dtype: object",roe,3,13.0
+"company_id     13
+company_id    TCS
+Name: 4, dtype: object",compounded_sales_growth,10,11.0
+"company_id     13
+company_id    TCS
+Name: 4, dtype: object",compounded_profit_growth,10,9.0
+"company_id     13
+company_id    TCS
+Name: 4, dtype: object",stock_price_cagr,10,14.0
+"company_id     13
+company_id    TCS
+Name: 4, dtype: object",roe,10,40.0
+"company_id     14
+company_id    TCS
+Name: 5, dtype: object",compounded_sales_growth,5,10.0
+"company_id     14
+company_id    TCS
+Name: 5, dtype: object",compounded_profit_growth,5,8.0
+"company_id     14
+company_id    TCS
+Name: 5, dtype: object",stock_price_cagr,5,16.0
+"company_id     14
+company_id    TCS
+Name: 5, dtype: object",roe,5,44.0
+"company_id     15
+company_id    TCS
+Name: 6, dtype: object",compounded_sales_growth,3,14.0
+"company_id     15
+company_id    TCS
+Name: 6, dtype: object",compounded_profit_growth,3,12.0
+"company_id     15
+company_id    TCS
+Name: 6, dtype: object",stock_price_cagr,3,8.0
+"company_id     15
+company_id    TCS
+Name: 6, dtype: object",roe,3,47.0
+"company_id     16
+company_id    TCS
+Name: 7, dtype: object",stock_price_cagr,1,16.0
+"company_id       17
+company_id    WIPRO
+Name: 8, dtype: object",compounded_sales_growth,10,8.0
+"company_id       17
+company_id    WIPRO
+Name: 8, dtype: object",compounded_profit_growth,10,3.0
+"company_id       17
+company_id    WIPRO
+Name: 8, dtype: object",stock_price_cagr,10,12.0
+"company_id       17
+company_id    WIPRO
+Name: 8, dtype: object",roe,10,18.0
+"company_id       18
+company_id    WIPRO
+Name: 9, dtype: object",compounded_sales_growth,5,9.0
+"company_id       18
+company_id    WIPRO
+Name: 9, dtype: object",compounded_profit_growth,5,4.0
+"company_id       18
+company_id    WIPRO
+Name: 9, dtype: object",stock_price_cagr,5,20.0
+"company_id       18
+company_id    WIPRO
+Name: 9, dtype: object",roe,5,17.0
+"company_id       19
+company_id    WIPRO
+Name: 10, dtype: object",compounded_sales_growth,3,13.0
+"company_id       19
+company_id    WIPRO
+Name: 10, dtype: object",compounded_profit_growth,3,0.0
+"company_id       19
+company_id    WIPRO
+Name: 10, dtype: object",roe,3,17.0
+"company_id           2
+company_id    HDFCBANK
+Name: 11, dtype: object",compounded_sales_growth,5,22.0
+"company_id           2
+company_id    HDFCBANK
+Name: 11, dtype: object",compounded_profit_growth,5,23.0
+"company_id           2
+company_id    HDFCBANK
+Name: 11, dtype: object",stock_price_cagr,5,8.0
+"company_id           2
+company_id    HDFCBANK
+Name: 11, dtype: object",roe,5,17.0
+"company_id       20
+company_id    WIPRO
+Name: 12, dtype: object",stock_price_cagr,1,39.0
+"company_id           3
+company_id    HDFCBANK
+Name: 13, dtype: object",compounded_sales_growth,3,30.0
+"company_id           3
+company_id    HDFCBANK
+Name: 13, dtype: object",compounded_profit_growth,3,26.0
+"company_id           3
+company_id    HDFCBANK
+Name: 13, dtype: object",stock_price_cagr,3,8.0
+"company_id           3
+company_id    HDFCBANK
+Name: 13, dtype: object",roe,3,17.0
+"company_id           4
+company_id    HDFCBANK
+Name: 14, dtype: object",stock_price_cagr,1,13.0
+"company_id       5
+company_id    INFY
+Name: 15, dtype: object",compounded_sales_growth,10,12.0
+"company_id       5
+company_id    INFY
+Name: 15, dtype: object",compounded_profit_growth,10,9.0
+"company_id       5
+company_id    INFY
+Name: 15, dtype: object",stock_price_cagr,10,15.0
+"company_id       5
+company_id    INFY
+Name: 15, dtype: object",roe,10,27.0
+"company_id       6
+company_id    INFY
+Name: 16, dtype: object",compounded_sales_growth,5,13.0
+"company_id       6
+company_id    INFY
+Name: 16, dtype: object",compounded_profit_growth,5,11.0
+"company_id       6
+company_id    INFY
+Name: 16, dtype: object",stock_price_cagr,5,22.0
+"company_id       6
+company_id    INFY
+Name: 16, dtype: object",roe,5,29.0
+"company_id       7
+company_id    INFY
+Name: 17, dtype: object",compounded_sales_growth,3,5.0
+"company_id       7
+company_id    INFY
+Name: 17, dtype: object",compounded_profit_growth,3,10.0
+"company_id       7
+company_id    INFY
+Name: 17, dtype: object",stock_price_cagr,3,4.0
+"company_id       7
+company_id    INFY
+Name: 17, dtype: object",roe,3,31.0
+"company_id       8
+company_id    INFY
+Name: 18, dtype: object",stock_price_cagr,1,27.0
+"company_id          9
+company_id    SBILIFE
+Name: 19, dtype: object",compounded_sales_growth,10,23.0
+"company_id          9
+company_id    SBILIFE
+Name: 19, dtype: object",compounded_profit_growth,10,9.0
+"company_id          9
+company_id    SBILIFE
+Name: 19, dtype: object",stock_price_cagr,10,9.0
+"company_id          9
+company_id    SBILIFE
+Name: 19, dtype: object",roe,10,16.0

@@ -76,196 +76,77 @@ class ValuationAnalytics:
     # Main Function
     # =====================================================
 
-    def compute(
-
-        self,
-
-        companies_df,
-
-        ratios_df,
-
-        market_cap_df,
-
-        sectors_df
-
-    ):
+    def compute(self,companies_df, ratios_df,market_cap_df,sectors_df):
 
         logger.info("Starting valuation analytics...")
        
         # -------------------------------------------------
         # Latest Financial Year
         # -------------------------------------------------
-
         latest_year = ratios_df["year"].max()
 
-        logger.info(
-
-            f"Latest Financial Year : {latest_year}"
-
-        )
+        logger.info( f"Latest Financial Year : {latest_year}" )
 
         ratios_latest = (
-
             ratios_df
-
             [
-
-                ratios_df["year"]
-
-                ==
-
-                latest_year
-
-            ]
-
-            .copy()
-
+                ratios_df["year"]==latest_year
+            ].copy()
         )
 
-        market_latest = (
-
-            market_cap_df
-
-            [
-
-                market_cap_df["year"]
-
-                ==
-
-                latest_year
-
-            ]
-
-            .copy()
-
-        )
-
+        market_latest = ( market_cap_df [ market_cap_df["year"] == latest_year] .copy())
+           
         # -------------------------------------------------
         # Company Information
         # -------------------------------------------------
-
-        company_info = companies_df[
-
-            [
-
-                "id",
-
-                "company_name"
-
-            ]
-
-        ].copy()
-        company_info.rename(
-        columns={"id": "company_id"},
-        inplace=True
-    )
-
+        company_info = companies_df[ ["company_id","company_name"] ].copy()
+                           
         # -------------------------------------------------
         # Sector Information
         # -------------------------------------------------
-
         sector_info = sectors_df[
 
-            [
-
-                "company_id",
-
-                "broad_sector",
-
-                "sub_sector"
-
-            ]
-
-        ].copy()
+            ["company_id","broad_sector","sub_sector" ]].copy()
 
         # -------------------------------------------------
         # Five-Year PE History
         # -------------------------------------------------
-
         available_years = sorted(
-
-            ratios_df["year"]
-
-            .dropna()
-
-            .unique()
-
+            market_cap_df["year"].dropna().unique()
         )
 
         five_years = available_years[-5:]
 
         pe_history = (
-
-            ratios_df
-
-            [
-
-                ratios_df["year"]
-
-                .isin(five_years)
-
-            ]
-
-            [
-
+            market_cap_df[
+                market_cap_df["year"].isin(five_years)
+            ][
                 [
-
                     "company_id",
-
-                    "price_to_earnings"
-
+                    "pe_ratio"
                 ]
-
-            ]
-
-            .copy()
-
+            ].copy()
         )
 
         company_pe = (
-
             pe_history
-
-            .groupby(
-
-                "company_id"
-
-            )["price_to_earnings"]
-
+            .groupby("company_id")["pe_ratio"]
             .median()
-
             .reset_index()
-
         )
 
         company_pe.rename(
-
             columns={
-
-                "price_to_earnings":
-
-                "five_year_median_PE"
-
+                "pe_ratio": "five_year_median_PE"
             },
-
             inplace=True
-
         )
 
         # -------------------------------------------------
         # Merge Data
         # -------------------------------------------------
-
-        valuation = (
-
-            ratios_latest
-
-            .merge(
-
-                market_latest[
-
+        valuation = (ratios_latest .merge(market_latest[
                     [
-
                         "company_id",
 
                         "market_cap_crore",
@@ -275,54 +156,17 @@ class ValuationAnalytics:
                         "pb_ratio",
 
                         "ev_ebitda"
-
                     ]
+                ], on="company_id", how="left"
 
-                ],
+            ) .merge(company_info,on="company_id",how="left" )
+                
+            .merge(sector_info, on="company_id",how="left" )
 
-                on="company_id",
-
-                how="left"
-
-            )
-
-            .merge(
-
-                company_info,
-
-                on="company_id",
-
-                how="left"
-
-            )
-
-            .merge(
-
-                sector_info,
-
-                on="company_id",
-
-                how="left"
-
-            )
-
-            .merge(
-
-                company_pe,
-
-                on="company_id",
-
-                how="left"
-
-            )
-
+             .merge(company_pe,on="company_id",how="left"     )
         )
 
-        logger.info(
-
-            f"Companies Analysed : {len(valuation)}"
-
-        )
+        logger.info(f"Companies Analysed : {len(valuation)}" )
 
         # -------------------------------------------------
         # FCF Yield
@@ -330,33 +174,12 @@ class ValuationAnalytics:
 
         valuation["FCF_yield_pct"] = (
 
-            valuation["free_cash_flow_cr"]
+            valuation["free_cash_flow_cr"]/valuation["market_cap_crore"] ) * 100
 
-            /
-
-            valuation["market_cap_crore"]
-
-        ) * 100
-
-            # -------------------------------------------------
+        # -------------------------------------------------
         # Sector Median PE (Latest Year)
         # -------------------------------------------------
-
-        sector_pe = (
-
-            valuation
-
-            .groupby(
-
-                "broad_sector"
-
-            )["pe_ratio"]
-
-            .median()
-
-            .reset_index()
-
-        )
+        sector_pe = ( valuation.groupby("broad_sector"  )["pe_ratio"].median().reset_index() )
 
         sector_pe.rename(
 
@@ -382,61 +205,20 @@ class ValuationAnalytics:
 
         )
 
+        valuation.replace([np.inf, -np.inf],np.nan, inplace=True)
+
         # -------------------------------------------------
         # Relative Valuation Metrics
         # -------------------------------------------------
 
         valuation["PE_vs_5yr_median_pct"] = (
 
-            (
-
-                valuation["pe_ratio"]
-
-                -
-
-                valuation["five_year_median_PE"]
-
-            )
-
-            /
-
-            valuation["five_year_median_PE"]
-
-        ) * 100
+            ( valuation["pe_ratio"] - valuation["five_year_median_PE"]) / valuation["five_year_median_PE"]
+            .replace(0, np.nan))*100
 
         valuation["PE_vs_sector_median_pct"] = (
 
-            (
-
-                valuation["pe_ratio"]
-
-                -
-
-                valuation["sector_median_PE"]
-
-            )
-
-            /
-
-            valuation["sector_median_PE"]
-
-        ) * 100
-
-        valuation.replace(
-
-            [
-
-                np.inf,
-
-                -np.inf
-
-            ],
-
-            np.nan,
-
-            inplace=True
-
-        )
+            (valuation["pe_ratio"] - valuation["sector_median_PE"] ) / valuation["sector_median_PE"].replace(0, np.nan) ) * 100
 
         # -------------------------------------------------
         # Valuation Flags

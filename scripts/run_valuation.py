@@ -64,7 +64,7 @@ if "company_id" not in companies.columns:
 valuation = ValuationAnalytics(
     output_dir="output"
 )
-
+print(valuation.columns.tolist())
 summary = valuation.compute(
     companies_df=companies,
     ratios_df=financial_ratios,

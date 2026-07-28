@@ -1,0 +1,2 @@
+company_id,company_name,sector,P/E,P/B,EV/EBITDA,FCF_yield_pct,5yr_median_PE,sector_median_PE,PE_vs_5yr_median_pct,PE_vs_sector_median_pct,flag
+SIEMENS,Siemens Ltd,Industrials,,,,,41.13,,,,Fair

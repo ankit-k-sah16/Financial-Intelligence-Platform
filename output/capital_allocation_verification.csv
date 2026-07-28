@@ -1,0 +1,7 @@
+metric,value
+unique_companies,100
+expected_companies,92
+unique_years,51
+duplicate_records,23
+missing_allocations,0
+companies_with_missing_years,100

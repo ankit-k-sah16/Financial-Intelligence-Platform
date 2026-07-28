@@ -1,0 +1,52 @@
+company_id,metric_type,raw_text,reason
+"company_id         12
+company_id    SBILIFE
+Name: 3, dtype: object",compounded_sales_growth,TTM:            43%,Regex No Match
+"company_id         12
+company_id    SBILIFE
+Name: 3, dtype: object",compounded_profit_growth,TTM:                 18%,Regex No Match
+"company_id         12
+company_id    SBILIFE
+Name: 3, dtype: object",stock_price_cagr,1 Year:         -2%,Regex No Match
+"company_id         12
+company_id    SBILIFE
+Name: 3, dtype: object",roe,Last Year:      12%,Regex No Match
+"company_id     16
+company_id    TCS
+Name: 7, dtype: object",compounded_sales_growth,TTM:            5%,Regex No Match
+"company_id     16
+company_id    TCS
+Name: 7, dtype: object",compounded_profit_growth,TTM:                 8%,Regex No Match
+"company_id     16
+company_id    TCS
+Name: 7, dtype: object",roe,Last Year:       52%,Regex No Match
+"company_id       19
+company_id    WIPRO
+Name: 10, dtype: object",stock_price_cagr,3 Years:      -1%,Regex No Match
+"company_id       20
+company_id    WIPRO
+Name: 12, dtype: object",compounded_sales_growth,TTM:           -3%,Regex No Match
+"company_id       20
+company_id    WIPRO
+Name: 12, dtype: object",compounded_profit_growth,TTM:                 1%,Regex No Match
+"company_id       20
+company_id    WIPRO
+Name: 12, dtype: object",roe,Last Year:       14%,Regex No Match
+"company_id           4
+company_id    HDFCBANK
+Name: 14, dtype: object",compounded_sales_growth,TTM:            47%,Regex No Match
+"company_id           4
+company_id    HDFCBANK
+Name: 14, dtype: object",compounded_profit_growth,TTM:                27%,Regex No Match
+"company_id           4
+company_id    HDFCBANK
+Name: 14, dtype: object",roe,Last Year:    17%,Regex No Match
+"company_id       8
+company_id    INFY
+Name: 18, dtype: object",compounded_sales_growth,TTM:            3%,Regex No Match
+"company_id       8
+company_id    INFY
+Name: 18, dtype: object",compounded_profit_growth,TTM:                 8%,Regex No Match
+"company_id       8
+company_id    INFY
+Name: 18, dtype: object",roe,Last Year:     32%,Regex No Match
