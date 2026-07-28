@@ -1,285 +1,293 @@
 """
 Portfolio Summary Report
 N100 Financial Intelligence Platform
-
-Generates one-page summary per company.
 """
 
 from pathlib import Path
 
-import numpy as np
 import pandas as pd
 
 from reportlab.lib import colors
+from reportlab.lib.enums import TA_CENTER
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import (
     SimpleDocTemplate,
-    Table,
-    TableStyle,
     Paragraph,
     Spacer,
+    Table,
+    TableStyle,
+    PageBreak,
 )
-from reportlab.lib.enums import TA_CENTER
-
-
 class PortfolioSummary:
 
-    def __init__(self, data_provider):
+    def __init__(self,companies_df,sectors_df,ratios_df,output_dir):
 
-        self.data = data_provider
+        self.companies = companies_df.copy()
 
-        self.styles = getSampleStyleSheet()
+        self.companies.columns = (
+            self.companies.columns
+            .str.strip()
+            .str.lower()
+        )
 
-        self.styles["Heading1"].alignment = TA_CENTER
+        if "company_id" not in self.companies.columns:
+            self.companies.rename(
+                columns={"id": "company_id"},
+                inplace=True,
+            )
 
-    # ---------------------------------------------------------
-    # Trend Arrow
-    # ---------------------------------------------------------
+        self.sectors = sectors_df.copy()
+        self.sectors.columns = (
+            self.sectors.columns
+            .str.strip()
+            .str.lower()
+        )
 
-    @staticmethod
-    def trend_arrow(current, previous, higher_is_better=True):
+        self.ratios = ratios_df.copy()
+        self.ratios.columns = (
+            self.ratios.columns
+            .str.strip()
+            .str.lower()
+        )
+        self.output_dir = Path(output_dir)
+        self.output_dir.mkdir(
+                parents=True,
+                exist_ok=True,
+            )
+        styles = getSampleStyleSheet()
 
-        if pd.isna(current) or pd.isna(previous):
-            return "—"
+        self.title = styles["Heading1"]
+        self.title.alignment = TA_CENTER
+        self.heading = styles["Heading2"]
+        self.body = styles["BodyText"]
 
-        if previous == 0:
-            return "—"
+    # -------------------------------------------------------
+    def company_page(self, company_id):
+        company = self.companies[ self.companies.company_id == company_id ]
 
-        change = (current - previous) / abs(previous)
+        if company.empty:
+            return []
 
-        if abs(change) <= 0.02:
-            return "→"
+        company = company.iloc[0]
+        sector = self.sectors[self.sectors.company_id == company_id]
+            
+        sector = ( "-" if sector.empty 
+            else sector.iloc[0]["broad_sector"])
+  
+        ratio = self.ratios[self.ratios.company_id == company_id ]
 
-        if higher_is_better:
+        if ratio.empty:
+            return []
 
-            return "↑" if change > 0 else "↓"
+        ratio = ( ratio.sort_values("year") .iloc[-1])
 
-        return "↑" if change < 0 else "↓"
-
-    # ---------------------------------------------------------
-    # Format Value
-    # ---------------------------------------------------------
-
-    @staticmethod
-    def fmt(value, suffix=""):
-
-        try:
-
+        def arrow(value, inverse=False):
             if pd.isna(value):
                 return "-"
 
-            return f"{float(value):,.2f}{suffix}"
+            if inverse:
+                return "✓" if value <= 1 else "⚠"
 
-        except Exception:
-
-            return "-"
-
-    # ---------------------------------------------------------
-    # Latest + Previous Row
-    # ---------------------------------------------------------
-
-    def latest_rows(self, df):
-
-        if df.empty:
-            return None, None
-
-        df = df.copy()
-
-        df["year_dt"] = pd.to_datetime(
-            df["year"],
-            format="mixed",
-            errors="coerce",
-        )
-
-        df = (
-            df.dropna(subset=["year_dt"])
-            .sort_values("year_dt")
-            .tail(2)
-        )
-
-        if len(df) == 1:
-            return df.iloc[-1], None
-
-        return df.iloc[-1], df.iloc[-2]
-
-    # ---------------------------------------------------------
-    # Build Company Page
-    # ---------------------------------------------------------
-
-    def company_page(self, company_id):
+            return "▲" if value >= 0 else "▼"
 
         story = []
 
-        company = self.data._company_info(company_id)
-
-        pnl = self.data._profitloss(company_id)
-
-        balance = self.data._balancesheet(company_id)
-
-        latest_pnl, prev_pnl = self.latest_rows(pnl)
-
-        latest_bs, prev_bs = self.latest_rows(balance)
-
         story.append(
-            Paragraph(
-                f"<b>{company['company_name']}</b>",
-                self.styles["Heading1"],
+            Paragraph( "N100 Portfolio Summary",self.title,
             )
+        )
+ 
+        story.append(Spacer(1, 15)  )
+        story.append(
+            Paragraph(f"<b>{company.company_name}</b>", self.heading
+            )
+        )
+               
+        story.append(
+            Paragraph( f"Ticker : <b>{company.company_id}</b>", self.body,   
+            )  
         )
 
         story.append(
-            Paragraph(
-                f"{company['company_id']} | {company['sector']}",
-                self.styles["Heading2"],
-            )
+            Paragraph(f"Sector : <b>{sector}</b>",self.body,
+            ),           
         )
-
-        story.append(Spacer(1, 12))
-
-        def value(df, col):
-
-            if df is None:
-                return np.nan
-
-            return df.get(col, np.nan)
-
-        revenue = value(latest_pnl, "sales")
-        revenue_prev = value(prev_pnl, "sales")
-
-        profit = value(latest_pnl, "net_profit")
-        profit_prev = value(prev_pnl, "net_profit")
-
-        eps = value(latest_pnl, "eps")
-        eps_prev = value(prev_pnl, "eps")
-
-        roe = value(latest_pnl, "roe")
-        roe_prev = value(prev_pnl, "roe")
-
-        roce = value(latest_pnl, "roce")
-        roce_prev = value(prev_pnl, "roce")
-
-        de = value(latest_bs, "debt_to_equity")
-        de_prev = value(prev_bs, "debt_to_equity")
-
-        rows = [
-
-            [
-                "Revenue",
-                self.fmt(revenue),
-                self.trend_arrow(revenue, revenue_prev),
-            ],
-
-            [
-                "Net Profit",
-                self.fmt(profit),
-                self.trend_arrow(profit, profit_prev),
-            ],
-
-            [
-                "EPS",
-                self.fmt(eps),
-                self.trend_arrow(eps, eps_prev),
-            ],
-
+      
+        story.append(Spacer(1, 15))
+        
+        rows = [["Metric", "Value"],
             [
                 "ROE",
-                self.fmt(roe, "%"),
-                self.trend_arrow(roe, roe_prev),
+                f"{arrow(ratio.return_on_equity_pct)} "
+                f"{ratio.return_on_equity_pct:.2f}%"
+                if pd.notna(ratio.return_on_equity_pct)
+                else "-",
             ],
 
             [
-                "ROCE",
-                self.fmt(roce, "%"),
-                self.trend_arrow(roce, roce_prev),
+                "Net Margin",
+                f"{arrow(ratio.net_profit_margin_pct)} "
+                f"{ratio.net_profit_margin_pct:.2f}%"
+                if pd.notna(ratio.net_profit_margin_pct)
+                else "-",
+            ],
+
+            [
+                "Operating Margin",
+                f"{arrow(ratio.operating_profit_margin_pct)} "
+                f"{ratio.operating_profit_margin_pct:.2f}%"
+                if pd.notna(ratio.operating_profit_margin_pct)
+                else "-",
             ],
 
             [
                 "Debt / Equity",
-                self.fmt(de),
-                self.trend_arrow(
-                    de,
-                    de_prev,
-                    higher_is_better=False,
-                ),
+                f"{arrow(ratio.debt_to_equity,True)} "
+                f"{ratio.debt_to_equity:.2f}"
+                if pd.notna(ratio.debt_to_equity)
+                else "-",
             ],
 
+            [
+                "EPS",
+                f"{ratio.earnings_per_share:.2f}"
+                if pd.notna(ratio.earnings_per_share)
+                else "-",
+            ],
+
+            [
+                "Book Value",
+                f"{ratio.book_value_per_share:.2f}"
+                if pd.notna(ratio.book_value_per_share)
+                else "-",
+            ],
+
+            [
+                "Free Cash Flow",
+                f"{ratio.free_cash_flow_cr:.2f} Cr"
+                if pd.notna(ratio.free_cash_flow_cr)
+                else "-",
+            ],
         ]
 
-        table = Table(
-            rows,
-            colWidths=[170, 150, 60],
-        )
-
+        table = Table( rows, colWidths=[180,170] )
+    
         table.setStyle(
-
             TableStyle(
-
                 [
+                    ("GRID",(0,0),(-1,-1),0.4,colors.grey),
 
-                    ("GRID", (0, 0), (-1, -1), 0.3, colors.grey),
+                    ("BACKGROUND",(0,0),(-1,0),colors.lightgrey),
 
-                    ("BACKGROUND", (0, 0), (0, -1), colors.whitesmoke),
+                    ("FONTNAME",(0,0),(-1,0),"Helvetica-Bold"),
 
-                    ("FONTNAME", (0, 0), (-1, -1), "Helvetica"),
+                    ("ALIGN",(1,1),(-1,-1),"CENTER"),
 
-                    ("FONTNAME", (0, 0), (0, -1), "Helvetica-Bold"),
-
-                    ("ALIGN", (1, 0), (-1, -1), "CENTER"),
-
-                    ("BOTTOMPADDING", (0, 0), (-1, -1), 6),
-
-                    ("TOPPADDING", (0, 0), (-1, -1), 6),
-
-                ]
-
-            )
-
+                    ("BOTTOMPADDING",(0,0),(-1,-1),6),
+                ] )
         )
 
         story.append(table)
+        story.append( Spacer(1,18))
 
-        story.append(Spacer(1, 20))
+        snapshot = []
 
-        story.append(
+        if (pd.notna(ratio.return_on_equity_pct) and ratio.return_on_equity_pct >= 20 ):
+ 
+            snapshot.append("• Excellent ROE")
 
-            Paragraph(
+        elif pd.notna(ratio.return_on_equity_pct):
+            snapshot.append("• Moderate shareholder returns")
 
-                "<font size=9>Generated by N100 Financial Intelligence Platform</font>",
+        if (pd.notna(ratio.debt_to_equity)
+            and ratio.debt_to_equity <= 0.5 ):
+    
+            snapshot.append("• Low debt company")
 
-                self.styles["Normal"],
+        elif pd.notna(ratio.debt_to_equity):
+            snapshot.append("• Higher leverage")
 
+        if (pd.notna(ratio.free_cash_flow_cr)and ratio.free_cash_flow_cr > 0):
+        
+            snapshot.append("• Positive free cash flow")
+
+        else:
+            snapshot.append("• Weak cash generation")
+
+        if (pd.notna(ratio.net_profit_margin_pct) and ratio.net_profit_margin_pct >= 10):
+            snapshot.append("• Healthy profitability")
+
+        story.append( Paragraph("<b>Investment Snapshot</b>",
+                self.heading,
+            )
+        )
+        story.append(Spacer(1,8))
+    
+        for item in snapshot:
+            story.append(Paragraph(item,self.body 
+                )        
             )
 
+        story.append( Spacer(1,15))
+
+        info = [ ["Website", company.website or "-"],
+            ["Face Value",
+             str(company.face_value)
+             if pd.notna(company.face_value)
+             else "-"],
+
+            ["Book Value",
+             str(company.book_value)
+             if pd.notna(company.book_value)
+             else "-"],
+        ]
+        info_table = Table(info,colWidths=[110,240],)
+
+        info_table.setStyle(
+            TableStyle(
+                [   ("GRID",(0,0),(-1,-1),0.4,colors.grey),
+                    ("BACKGROUND",(0,0),(0,-1),colors.whitesmoke),
+                    ("FONTNAME",(0,0),(0,-1),"Helvetica-Bold"),
+                    ("BOTTOMPADDING",(0,0),(-1,-1),6),
+                ]
+            ))
+
+        story.append(info_table)
+
+        story.append(Spacer(1,18))
+
+        story.append(
+            Paragraph(
+                "<font size=8 color='grey'>"
+                "Generated by N100 Financial Intelligence Platform"
+                "</font>",
+
+                self.body,
+            )
         )
 
         return story
-
-    # ---------------------------------------------------------
-    # Generate Portfolio Summary
-    # ---------------------------------------------------------
-
+    
+    # -------------------------------------------------------
     def build(self, output_path):
+
+        story = []
+        companies = (self.companies
+            .sort_values("company_id")
+        )
+
+        for _, row in companies.iterrows():
+            page = self.company_page(row["company_id"])
+
+            if not page:
+                continue
+
+            story.extend(page)
+            story.append(PageBreak())
+
+        if story and isinstance(story[-1], PageBreak):
+            story.pop()
 
         doc = SimpleDocTemplate(str(output_path))
 
-        story = []
-
-        companies = self.data.companies_df.copy()
-        print(companies.columns.tolist())
-        companies = companies.sort_values("company_id").reset_index(drop=True)
-
-        for _, row in companies.iterrows():
-
-            company_story = self.company_page(
-                row["company_id"]
-            )
-
-            story.extend(company_story)
-
-            from reportlab.platypus import PageBreak
-
-            story.append(PageBreak())
-
         doc.build(story)
-
-        return Path(output_path)

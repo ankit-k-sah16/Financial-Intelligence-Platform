@@ -29,6 +29,7 @@ class BatchTearSheetGenerator:
         cashflow_df,
         proscons_df,
         intelligence_df,
+        sectors_df,
         output_dir,
     ):
 
@@ -62,6 +63,8 @@ class BatchTearSheetGenerator:
 
         self.intelligence_df = intelligence_df.copy()
 
+        self.sectors_df = sectors_df.copy()
+
         self.output_dir = Path(output_dir)
 
         self.output_dir.mkdir(
@@ -76,6 +79,7 @@ class BatchTearSheetGenerator:
             cashflow_df=self.cashflow_df,
             proscons_df=self.proscons_df,
             cashflow_intelligence_df=self.intelligence_df,
+            sectors_df=self.sectors_df,
             output_dir=self.output_dir,
         )
 

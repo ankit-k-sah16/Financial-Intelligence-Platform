@@ -62,7 +62,9 @@ def load_data():
     proscons = pd.read_excel(
         DATA_DIR /"raw"/ "prosandcons.xlsx",header=1,
     )
-
+    sectors = pd.read_excel(
+    DATA_DIR / "supporting" / "sectors.xlsx"
+)
     intelligence = pd.read_excel(
         REPORT_DIR /
         "cashflow_intelligence.xlsx",
@@ -75,6 +77,7 @@ def load_data():
         cashflow,
         proscons,
         intelligence,
+        sectors
     )
 
 # ---------------------------------------------------------
@@ -90,6 +93,7 @@ def create_generator():
         cashflow,
         proscons,
         intelligence,
+        sectors,
     ) = load_data()
 
     return BatchTearSheetGenerator(
@@ -99,6 +103,7 @@ def create_generator():
         cashflow_df=cashflow,
         proscons_df=proscons,
         intelligence_df=intelligence,
+        sectors_df=sectors,
         output_dir=OUTPUT_DIR,
     )
 

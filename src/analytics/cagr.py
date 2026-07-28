@@ -4,6 +4,9 @@ CAGR (Compound Annual Growth Rate) calculation for the N100 Financial Intelligen
 """
 
 from math import pow
+import pandas as pd 
+import numpy as np
+
 
 class CAGR_calculator:
     """"
@@ -59,7 +62,7 @@ class CAGR_calculator:
             return None, "ERROR_IN_CAGR_CALCULATION"
 
 
-     # -----------------------------
+    # -----------------------------
     # Revenue CAGR
     # -----------------------------
 
@@ -138,6 +141,54 @@ class CAGR_calculator:
     @staticmethod
     def eps_cagr_10yr(start_eps, end_eps):
         return CAGR_calculator.eps_cagr(start_eps, end_eps, 10)
-                
+
+    @staticmethod
+    def fcf_cagr_5yr(df: pd.DataFrame) -> pd.DataFrame:
+        """
+        Calculate 5-Year Free Cash Flow CAGR.
+
+        Uses:
+            free_cash_flow_cr
+
+        Returns:
+            company_id
+            year
+            fcf_cagr_5yr
+        """
+
+        df = df.copy()
+
+        df = df.sort_values(
+            ["company_id", "year"]
+        )
+
+        df["fcf_cagr_5yr"] = np.nan
+
+        for company_id, group in df.groupby("company_id"):
+
+            group = group.sort_values("year")
+
+            for i in range(5, len(group)):
+
+                current = group.iloc[i]["free_cash_flow_cr"]
+                previous = group.iloc[i - 5]["free_cash_flow_cr"]
+
+                if (
+                    pd.notna(current)
+                    and pd.notna(previous)
+                    and previous > 0
+                    and current > 0
+                ):
+
+                    cagr = (
+                        (current / previous) ** (1 / 5) - 1
+                    ) * 100
+
+                    df.loc[
+                        group.index[i],
+                        "fcf_cagr_5yr",
+                    ] = round(cagr, 2)
+
+        return df           
         
         

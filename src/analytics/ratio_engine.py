@@ -11,6 +11,7 @@ sys.path.append(str(PROJECT_ROOT))
 
 from datetime import datetime
 import pandas as pd
+import numpy as np
 from sqlalchemy import create_engine
 from sqlalchemy import text
 from config.setting import DB_PATH
@@ -318,6 +319,8 @@ class RatioEngine:
             else:
                 eps_cagr_flag = "INSUFFICIENT"
 
+           
+
             # --------------------------------------------------
             # CFO Quality
             # --------------------------------------------------
@@ -461,6 +464,7 @@ class RatioEngine:
                 "pat_cagr_5yr_flag": pat_cagr_flag,
                 "eps_cagr_5yr": eps_cagr_5yr,
                 "eps_cagr_5yr_flag": eps_cagr_flag,
+                
 
                 # Optional (if you compute these later)
                 "revenue_cagr_3yr": row.get("revenue_cagr_3yr", None),
@@ -484,18 +488,33 @@ class RatioEngine:
 
             })      
 
+        # --------------------------------------------------
+        # Build Final DataFrame
+        # --------------------------------------------------
         self.results = pd.DataFrame(results)
+
+        # Calculate FCF CAGR
+        self.results = CAGR_calculator.fcf_cagr_5yr(self.results)
+
+        # Sort data
+        self.results.sort_values(
+            by=["company_id", "year"],
+            inplace=True
+        )
+
+        self.results.reset_index(
+            drop=True,
+            inplace=True
+        )
+
+        # Final dataframe used by the engine
+        self.ratios_df = self.results
 
         print("=" * 80)
         print("NEW DATAFRAME COLUMNS")
         print(self.results.columns.tolist())
         print("=" * 80)
 
-        self.results.sort_values(by=["company_id",
-                    "year" ],inplace=True)
-
-        self.results.reset_index(drop=True, inplace=True)  
-        
         print()
         print("=" * 60)
         print("Ratio Calculation Completed")
@@ -504,12 +523,9 @@ class RatioEngine:
 
         print()
         print("Computed KPI Columns")
-
         print(self.results.columns.tolist())
         print()
         print(self.results.head())
-            
-
     # -----------------------------------------------------
     # Composite Quality Score
     # -----------------------------------------------------
@@ -702,7 +718,7 @@ class RatioEngine:
         print("=" * 60)
         print("Financial Ratio Engine Started")
         print("=" * 60)
-        
+    
         self.load_tables()
         self.merge_tables()
         self.prepare_dataframe()

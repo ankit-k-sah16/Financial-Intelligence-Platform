@@ -16,6 +16,8 @@ OUTPUT_DIR = ROOT_DIR / os.getenv("OUTPUT_PATH")
 
 REPORT_OUTPUT_DIR =  ROOT_DIR/ os.getenv("REPORT_OUTPUT_PATH")
 
+REPORT_DIR=  ROOT_DIR/ os.getenv("REPORT_PATH")
+
 
     
     

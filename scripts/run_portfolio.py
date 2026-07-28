@@ -1,26 +1,36 @@
 from pathlib import Path
 import sys
+import pandas as pd
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.append(str(PROJECT_ROOT))
 
-from scripts.generate_tearsheet import create_generator
+from config.setting import RAW_DATA_DIR, REPORT_DIR,SUPPORTING_DATA_DIR
 from src.reports.portfolio_summary import PortfolioSummary
 
 
-def main():
+companies = pd.read_excel(
+    RAW_DATA_DIR / "companies.xlsx",
+    header=1,
+)
 
-    batch = create_generator()
+sectors = pd.read_excel(
+   SUPPORTING_DATA_DIR / "sectors.xlsx"
+)
 
-    summary = PortfolioSummary(batch.generator)
+ratios = pd.read_excel(
+    SUPPORTING_DATA_DIR/ "financial_ratios.xlsx"
+)
 
-    output = Path("reports/portfolio/portfolio_summary.pdf")
-    output.parent.mkdir(parents=True, exist_ok=True)
+summary = PortfolioSummary(
+    companies_df=companies,
+    sectors_df=sectors,
+    ratios_df=ratios,
+    output_dir=REPORT_DIR,
+)
 
-    summary.build(output)
+summary.build(
+    REPORT_DIR / "portfolio_summary.pdf"
+)
 
-    print(f"Portfolio summary saved to {output}")
-
-
-if __name__ == "__main__":
-    main()
+print("Portfolio summary generated successfully.")
