@@ -1,0 +1,4 @@
+company_id,company_name,broad_sector,metric,value,z_score
+GAIL,GAIL (India) Ltd,Energy,interest_coverage,26.84,3.19
+BAJAJHLDNG,Bajaj Holdings & Investment Ltd,Financials,interest_coverage,3804.5,3.83
+BAJAJHLDNG,Bajaj Holdings & Investment Ltd,Financials,net_profit_margin_pct,431.97,4.61

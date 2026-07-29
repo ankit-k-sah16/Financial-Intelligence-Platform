@@ -13,7 +13,8 @@ import pandas as pd
 
 from sklearn.cluster import KMeans
 from sklearn.preprocessing import StandardScaler
-
+import seaborn as sns
+from scipy.stats import zscore
 
 class CompanyClustering:
     """
@@ -29,11 +30,11 @@ class CompanyClustering:
     ]
 
     CLUSTER_NAMES = {
-        0: "Growth Leaders",
-        1: "Stable Compounders",
-        2: "Value Opportunities",
-        3: "High Risk",
-        4: "Turnaround Candidates",
+        0: "High Quality Compounders",
+        1: "Defensive Dividend Payers",
+        2: "Value Cyclicals",
+        3: "Distressed / Turnaround",
+        4: "Emerging Growth"
     }
 
     def __init__(
@@ -115,7 +116,7 @@ class CompanyClustering:
             inertia,
             marker="o",
         )
-
+        plt.xticks(range(2,11))
         plt.xlabel("Number of Clusters (k)")
         plt.ylabel("Inertia")
         plt.title("Elbow Method")
@@ -136,6 +137,251 @@ class CompanyClustering:
         print(
             "Review the plot to confirm that k=5 lies near the elbow."
         )
+
+    #----------------------------------------------------------
+    # Profile Clustering
+    #----------------------------------------------------------
+    def profile_clustering(self,df):
+
+        
+
+        profile = (df.groupby("cluster_id") .agg(
+            company_count=("company_id", "count"),
+
+            roe_mean=("return_on_equity_pct", "mean"),
+            roe_median=("return_on_equity_pct", "median"),
+
+            debt_mean=("debt_to_equity", "mean"),
+            debt_median=("debt_to_equity", "median"),
+
+            revenue_cagr_mean=("revenue_cagr_5yr", "mean"),
+            revenue_cagr_median=("revenue_cagr_5yr", "median"),
+
+            fcf_cagr_mean=("fcf_cagr_5yr", "mean"),
+            fcf_cagr_median=("fcf_cagr_5yr", "median"),
+
+            op_margin_mean=("operating_profit_margin_pct", "mean"),
+            op_margin_median=("operating_profit_margin_pct", "median"),
+        ) .round(2)      
+    )
+        profile.to_csv(self.output_dir/"cluster_profile.csv")
+
+        return profile
+
+    #----------------------------------------------------------
+    # Cluster Naming
+    #----------------------------------------------------------
+    def assign_cluster_name(self,df):
+    
+
+        df['cluster_name']=df['cluster_id'].map(self.CLUSTER_NAMES)
+
+        df.to_csv(self.output_dir/"cluster_labels.csv")
+
+        return df
+
+    #----------------------------------------------------------
+    # Correlation Heatmap
+    #----------------------------------------------------------
+    def correlation_heatmap(self,df):
+
+        CORRELATION_FEATURES=[
+           "return_on_equity_pct",
+
+            "return_on_capital_employed_pct",
+
+            "return_on_assets_pct",
+
+            "debt_to_equity",
+
+            "interest_coverage",
+
+            "asset_turnover",
+
+            "operating_profit_margin_pct",
+
+            "net_profit_margin_pct",
+
+            "revenue_cagr_5yr",
+
+            "fcf_cagr_5yr"
+        ]
+
+        corr = (df[CORRELATION_FEATURES].corr(method='pearson'))
+        corr_matrix = corr
+
+        corr_matrix.to_csv("output/correlation_matrix.csv")
+
+        plt.figure(figsize=(12,10))
+
+        sns.heatmap(
+            corr,
+            annot=True,
+            cmap="RdYlGn",
+            fmt=".2f",
+            square=True
+        )
+
+        plt.tight_layout()
+
+        plt.savefig(
+            self.reports_dir /"correlation_heatmap.png", dpi=300
+            
+           
+        )
+        plt.close()
+        return corr_matrix# ---------------------------------------------------------
+# Outlier Detection
+# ---------------------------------------------------------
+    def detect_outliers(self, df):
+        KPI_COLUMNS = [
+            "return_on_equity_pct",
+            "return_on_capital_employed_pct",
+            "return_on_assets_pct",
+            "debt_to_equity",
+            "interest_coverage",
+            "asset_turnover",
+            "operating_profit_margin_pct",
+            "net_profit_margin_pct",
+            "revenue_cagr_5yr",
+            "fcf_cagr_5yr",
+        ]
+
+        outlier_rows = []
+
+        # -----------------------------------------------------
+        # Process sector-wise
+        # -----------------------------------------------------
+        for sector, sector_df in df.groupby("broad_sector"):
+            sector_df = sector_df.copy()
+
+            for metric in KPI_COLUMNS:
+
+                if metric not in sector_df.columns:
+                    continue
+
+                if sector_df[metric].dropna().empty:
+                    continue
+
+                if sector_df[metric].std(skipna=True) == 0:
+                    sector_df[f"{metric}_z"] = 0
+
+                else:
+                    sector_df[f"{metric}_z"] = zscore(
+                        sector_df[metric],
+                        nan_policy="omit"
+                    )
+
+                flagged = sector_df[sector_df[f"{metric}_z"].abs() > 3 ]
+
+                for _, row in flagged.iterrows():
+
+                    outlier_rows.append({
+                        "company_id":  row["company_id"],                    
+                        "company_name": row.get("company_name", None),
+                        "broad_sector":sector,
+                        "metric":metric,                     
+                        "value": row[metric],
+                        "z_score":round(row[f"{metric}_z"], 2),
+                    })        
+
+                    
+
+        # -----------------------------------------------------
+        # Save report
+        # -----------------------------------------------------
+        outlier_report = pd.DataFrame(outlier_rows)
+
+        outlier_report.to_csv(self.output_dir / "outlier_report.csv", index=False )
+
+        print(f" Outlier report saved to "
+            f"{self.output_dir/'outlier_report.csv'}"
+        )
+
+        print(f"Total Outliers Detected : {len(outlier_report)}" )
+
+
+        return outlier_report
+    # ---------------------------------------------------------
+    # Portfolio Statistics
+    # ---------------------------------------------------------
+    def portfolio_statistics(self, df):
+
+        KPI_COLUMNS = [
+            "return_on_equity_pct",
+            "return_on_capital_employed_pct",
+            "return_on_assets_pct",
+            "debt_to_equity",
+            "interest_coverage",
+            "asset_turnover",
+            "net_profit_margin_pct",
+            "operating_profit_margin_pct",
+            "free_cash_flow_cr",
+            "cash_from_operations_cr",
+            "fcf_conversion_rate",
+            "revenue_cagr_5yr",
+            "pat_cagr_5yr",
+            "eps_cagr_5yr",
+            "fcf_cagr_5yr",
+            "market_cap",
+            "pe",
+            "pb",
+            "dividend_yield",
+            "composite_quality_score",
+        ]
+
+        stats = []
+
+        for metric in KPI_COLUMNS:
+
+           
+            if metric not in df.columns:
+                continue
+
+            values = df[metric].dropna()
+
+          
+            if len(values) == 0:
+                continue
+
+            stats.append({
+                "metric": metric,
+
+                "count": int(values.count()),
+
+                "minimum": round(values.min(), 2),
+
+                "P10": round(values.quantile(0.10), 2),
+
+                "P25": round(values.quantile(0.25), 2),
+
+                "P50": round(values.quantile(0.50), 2),
+
+                "P75": round(values.quantile(0.75), 2),
+
+                "P90": round(values.quantile(0.90), 2),
+
+                "maximum": round(values.max(), 2),
+
+                "mean": round(values.mean(), 2),
+
+                "std": round(values.std(), 2),
+            })
+
+        portfolio_stats = pd.DataFrame(stats)
+
+        portfolio_stats.sort_values(by="metric",inplace=True)
+                  
+        portfolio_stats.reset_index(drop=True,inplace=True)
+
+        portfolio_stats.to_csv(self.output_dir / "portfolio_stats.csv", index=False)
+
+        print(f" Portfolio statistics saved to "
+            f"{self.output_dir / 'portfolio_stats.csv'}")
+            
+        print( f"KPIs Profiled : {len(portfolio_stats)}" )
+       
+        return portfolio_stats
 
     # ---------------------------------------------------------
     # Run Clustering
@@ -177,6 +423,24 @@ class CompanyClustering:
                 "distance_from_centroid": distances.round(4),
             }
         )
+        clustered_df = df.copy()
+
+        clustered_df["cluster_id"] = labels
+        clustered_df["cluster_name"] = (clustered_df["cluster_id"].map(self.CLUSTER_NAMES))
+    
+        clustered_df["distance_from_centroid"] = distances
+
+        clustered_df = self.assign_cluster_name(clustered_df)
+
+        print(clustered_df.columns.tolist())
+        
+        self.profile_clustering(clustered_df)
+
+        self.correlation_heatmap(clustered_df)
+
+        self.detect_outliers(clustered_df)
+
+        self.portfolio_statistics(clustered_df)
 
         result.to_csv(
             self.output_dir / "cluster_labels.csv",

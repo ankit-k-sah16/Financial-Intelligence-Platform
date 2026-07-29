@@ -73,10 +73,21 @@ print(f"Companies clustered : {len(cluster_df)}")
 print(f"Clusters created    : {cluster_df['cluster_id'].nunique()}")
 
 print("\nCluster Distribution")
-print(cluster_df["cluster_id"].value_counts().sort_index())
+print("-" * 60)
 
-print("\nOutput Files")
-print(f"CSV  : {OUTPUT_DIR / 'cluster_labels.csv'}")
-print(f"Plot : {REPORT_DIR / 'elbow_plot.png'}")
+print(cluster_df.groupby(["cluster_id", "cluster_name"]
+        ).size().reset_index(name="companies"))
+    
+print("\nGenerated Files")
+print("-" * 60)
+
+print(f"Cluster Labels       : {OUTPUT_DIR / 'cluster_labels.csv'}")
+print(f"Cluster Profile      : {OUTPUT_DIR / 'cluster_profile.csv'}")
+print(f"Outlier Report       : {OUTPUT_DIR / 'outlier_report.csv'}")
+print(f"Portfolio Statistics : {OUTPUT_DIR / 'portfolio_stats.csv'}")
+print(f"Correlation Matrix   : {OUTPUT_DIR / 'correlation_matrix.csv'}")
+
+print(f"Elbow Plot           : {REPORT_DIR / 'elbow_plot.png'}")
+print(f"Correlation Heatmap  : {REPORT_DIR / 'correlation_heatmap.png'}")
 
 print("\nDone.")
